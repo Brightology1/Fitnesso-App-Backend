@@ -90,7 +90,6 @@ public class PersonServiceImpl implements PersonService {
         Person person = new Person();
         modelMapper.map(personRequest, person);
 
-
         final String encodedPassword = bCryptPasswordEncoder.encode(personRequest.getPassword());
         person.setPassword(encodedPassword);
         String token = RandomString.make(64);
