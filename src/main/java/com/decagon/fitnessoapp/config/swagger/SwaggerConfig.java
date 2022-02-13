@@ -84,10 +84,20 @@ public class SwaggerConfig implements WebMvcConfigurer {
         authorizationScopes[0] = authorizationScope;
         return List.of(new SecurityReference("JWT", authorizationScopes));
     }
+    
+    private ApiInfo metaData() {
+        return new ApiInfoBuilder()
+                .title("Java 009 - Fitnesso App")
+                .description("Francis Swagger configuration for Fitnesso Application")
+                .version("1.1.0")
+                .license("Apache 2.0")
+                .build();
+    }
 
     @Bean
     public Docket api(){
         return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(metaData())
                 .securityContexts(List.of(securityContext()))
                 .securitySchemes(List.of(apiKey()))
                 .select()
