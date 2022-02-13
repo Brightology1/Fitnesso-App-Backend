@@ -19,13 +19,13 @@ public interface PersonService {
 
     ResponseEntity<String> removeTrainer(Long id);
 
-    void sendingEmail(PersonRequest personRequest) throws MailjetSocketTimeoutException, MailjetException;
+    PersonResponse sendingEmail(String email) throws MailjetSocketTimeoutException, MailjetException;
 
     ChangePasswordResponse updateCurrentPassword(ChangePasswordRequest changePasswordRequest);
 
-    String resetPasswordToken(String email) throws MailjetSocketTimeoutException, MailjetException;
+    PersonResponse resetPasswordToken(String email) throws MailjetSocketTimeoutException, MailjetException;
 
-    String updateResetPassword(ResetPasswordRequest passwordRequest, String token);
+    PersonResponse updateResetPassword(ResetPasswordRequest passwordRequest, String token);
 
     void resetPasswordMailSender(String email, String token) throws MailjetSocketTimeoutException,
             MailjetException;
