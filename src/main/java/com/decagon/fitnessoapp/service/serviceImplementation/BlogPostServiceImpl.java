@@ -90,6 +90,7 @@ public class BlogPostServiceImpl implements BlogPostService {
         BlogPost blogPost = blogPostRepository.findBlogPostsById(id).orElseThrow(
                 ()-> new CustomServiceExceptions("Post Not Found"));
         //blogPostRepository.deleteById(id);
+        System.out.println("Delete this?: " + blogPost);
         blogPostRepository.delete(blogPost);
         return ResponseEntity.ok().body("Post deleted successfully");
 

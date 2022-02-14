@@ -92,6 +92,8 @@ public class OrderServiceImpl implements OrderService {
     public Page<OrderResponse> getOrdersByStatus(ORDER_STATUS status, int pageNo) {
         int pageSize = 10;
         int skipCount = (pageNo - 1) * pageSize;
+        // TODO: Make getOrder by status return a string for no order status
+        // TODO: Use unique custom exceptions for every implementation
 
         List<OrderResponse> orderList = orderRepository.findAllByOrderStatus(status)
                 .stream().map(x -> {
