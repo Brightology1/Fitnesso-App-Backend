@@ -1,5 +1,6 @@
 package com.decagon.fitnessoapp.service;
 
+import com.decagon.fitnessoapp.dto.PersonResponse;
 import com.decagon.fitnessoapp.model.user.Person;
 import com.decagon.fitnessoapp.model.user.VerificationToken;
 
@@ -13,5 +14,5 @@ public interface VerificationService {
 
     void setConfirmedAt(String token);
 
-    String confirmToken(String token);
+    PersonResponse confirmToken(String token);
 }

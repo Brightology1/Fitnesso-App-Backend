@@ -64,8 +64,13 @@ public class PersonController {
     }
 
         @GetMapping("/confirm")
-        public String confirm (@RequestParam("token") String token){
-            return verificationTokenService.confirmToken(token);
+        public ResponseEntity<PersonResponse> confirm (@RequestParam("token") String token){
+            return ResponseEntity.ok(verificationTokenService.confirmToken(token));
+        }
+
+        @PostMapping("/resend-token")
+        public ResponseEntity<PersonResponse> resendingEmailToken (@RequestBody EmailTokenRequest tokenRequest) throws MailjetSocketTimeoutException, MailjetException {
+            return ResponseEntity.ok(personService.sendingEmail(tokenRequest.getEmail()));
         }
 
         @PostMapping(path="/login", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -84,7 +89,7 @@ public class PersonController {
         }
 
         @PostMapping("/admin/reset_password")
-        public ResponseEntity<String> adminProcessResetPassword (@RequestBody EmailRequest resetEmail) throws MailjetSocketTimeoutException, MailjetException {
+        public ResponseEntity<PersonResponse> adminProcessResetPassword (@RequestBody EmailRequest resetEmail) throws MailjetSocketTimeoutException, MailjetException {
             return ResponseEntity.ok().body(personService.resetPasswordToken(resetEmail.getEmail()));
         }
 
