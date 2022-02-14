@@ -1,5 +1,6 @@
 package com.decagon.fitnessoapp.service.serviceImplementation;
 
+import com.decagon.fitnessoapp.dto.PersonResponse;
 import com.decagon.fitnessoapp.exception.CustomServiceExceptions;
 import com.decagon.fitnessoapp.model.user.Person;
 import com.decagon.fitnessoapp.model.user.VerificationToken;
@@ -39,7 +40,7 @@ public class VerificationTokenServiceImpl implements VerificationService {
     }
 
     @Transactional
-    public String confirmToken(String token){
+    public PersonResponse confirmToken(String token){
         VerificationToken verificationToken = getToken(token)
                 .orElseThrow(() -> new CustomServiceExceptions("token not found"));
 
@@ -56,6 +57,6 @@ public class VerificationTokenServiceImpl implements VerificationService {
         setConfirmedAt(token);
         personRepository.findByEmail(verificationToken.getPerson().getEmail()).ifPresent((person) ->
                 person.setVerifyEmail(true));
-        return "Email verified";
+        return PersonResponse.builder().message("Email verified").build();
     }
 }

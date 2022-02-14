@@ -99,10 +99,9 @@ public class PersonServiceImpl implements PersonService {
         String url = cloudinaryConfig.createImage(person.getImage());
         person.setImage(url);
         personRepository.save(person);
-        sendingEmail(personRequest);
-        PersonResponse personResponse = new PersonResponse();
-        modelMapper.map(person, personResponse);
-        return personResponse;
+        sendingEmail(personRequest.getEmail());
+        return PersonResponse.builder().firstName(person.getFirstName()).lastName(person.getLastName())
+                .email(person.getEmail()).build();
     }
 
     @Override
@@ -130,13 +129,14 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void sendingEmail(PersonRequest personRequest) throws MailjetSocketTimeoutException, MailjetException {
-        Person person = personRepository.findByEmail(personRequest.getEmail())
+    public PersonResponse sendingEmail(String email) throws MailjetSocketTimeoutException, MailjetException {
+        Person person = personRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomServiceExceptions("Email not registered"));
         String token = verificationTokenService.saveVerificationToken(person);
         String link = "http://"+ website + ":" + port + "/person/confirm?token=" + token;
         String subject = "Confirm your email";
         emailSender.sendMessage(subject, person.getEmail(), buildEmail(person.getFirstName(), link));
+        return PersonResponse.builder().message("Email sent").build();
     }
 
 
@@ -200,7 +200,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public String resetPasswordToken(String email) throws MailjetSocketTimeoutException, MailjetException {
+    public PersonResponse resetPasswordToken(String email) throws MailjetSocketTimeoutException, MailjetException {
         Person person = personRepository.findByEmail(email)
                 .orElseThrow(()-> new PersonNotFoundException("Email not Registered"));
         String token = RandomString.make(64);
@@ -209,20 +209,20 @@ public class PersonServiceImpl implements PersonService {
         person.setResetPasswordToken(token);
         personRepository.save(person);
         resetPasswordMailSender(person.getEmail(), token);
-        return "email sent";
+        return PersonResponse.builder().message("email sent").build();
     }
 
 
     @Override
-    public String updateResetPassword(ResetPasswordRequest passwordRequest, String token) {
+    public PersonResponse updateResetPassword(ResetPasswordRequest passwordRequest, String token) {
         Person person = personRepository.findByResetPasswordToken(token)
                 .orElseThrow(()-> new PersonNotFoundException("Person not found"));
         if(passwordRequest.getNewPassword().equals(passwordRequest.getConfirmPassword())){
             person.setPassword(bCryptPasswordEncoder.encode(passwordRequest.getNewPassword()));
             personRepository.save(person);
-            return "updated";
+            return PersonResponse.builder().message("updated").build();
         }
-        return "mismatch of new and confirm password";
+        return PersonResponse.builder().message("mismatch of new and confirm password").build();
     }
 
     @Override
