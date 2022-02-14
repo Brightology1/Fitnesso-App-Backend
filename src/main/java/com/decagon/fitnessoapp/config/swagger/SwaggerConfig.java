@@ -24,56 +24,30 @@ import java.util.List;
 @EnableSwagger2
 public class SwaggerConfig implements WebMvcConfigurer {
 
-//     @Bean
-//     public Docket api() {
-//         return new Docket(DocumentationType.SWAGGER_2)
-//                 .protocols(new HashSet<>(Arrays.asList("HTTP","HTTPs")))
-//                 .apiInfo(metaData())
-//                 .securityContexts(List.of(securityContext()))
-//                 .securitySchemes(List.of(apiKey()))
-//                 .useDefaultResponseMessages(false)
-//                 .select()
-//                 .apis(RequestHandlerSelectors.basePackage("com.decagon.fitnessoapp"))
-//                 .paths(PathSelectors.any())
-//                 .build();
-//     }
-
-//     @Override
-//     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//         registry
-//                 .addResourceHandler("swagger-ui.html")
-//                 .addResourceLocations("classpath:/META-INF/resources/");
-//         registry
-//                 .addResourceHandler("/webjars/**")
-//                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
-//     }
-
-//     private SecurityContext securityContext() {
-//         return SecurityContext.builder().securityReferences(defaultAuth()).build();
-//     }
-
-//     private List<SecurityReference> defaultAuth() {
-//         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-//         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-//         authorizationScopes[0] = authorizationScope;
-//         return List.of(new SecurityReference("Bearer", authorizationScopes));
-//     }
-
-//     private ApiInfo metaData() {
-//         return new ApiInfoBuilder()
-//                 .title("Java 009 - Fitnesso App")
-//                 .description("Swagger configuration for Fitnesso Application")
-//                 .version("1.1.0")
-//                 .license("Apache 2.0")
-//                 .build();
-//     }
-
-//     private ApiKey apiKey() {
-//         return new ApiKey("Bearer", "Authorization", "header");
-//     }
-    private ApiKey apiKey() {
-        return new ApiKey("JWT", "Authorization", "header");
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .protocols(new HashSet<>(Arrays.asList("HTTP","HTTPs")))
+                .apiInfo(metaData())
+                .securityContexts(List.of(securityContext()))
+                .securitySchemes(List.of(apiKey()))
+                .useDefaultResponseMessages(false)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.decagon.fitnessoapp"))
+                .paths(PathSelectors.any())
+                .build();
     }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry
+                .addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry
+                .addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
     private SecurityContext securityContext() {
         return SecurityContext.builder().securityReferences(defaultAuth()).build();
     }
@@ -82,27 +56,20 @@ public class SwaggerConfig implements WebMvcConfigurer {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        return List.of(new SecurityReference("JWT", authorizationScopes));
+        return List.of(new SecurityReference("Bearer", authorizationScopes));
     }
-    
+
     private ApiInfo metaData() {
         return new ApiInfoBuilder()
                 .title("Java 009 - Fitnesso App")
-                .description("Francis Swagger configuration for Fitnesso Application")
+                .description("Swagger configuration for Fitnesso Application")
                 .version("1.1.0")
                 .license("Apache 2.0")
                 .build();
     }
 
-    @Bean
-    public Docket api(){
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(metaData())
-                .securityContexts(List.of(securityContext()))
-                .securitySchemes(List.of(apiKey()))
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.decagon"))
-                .paths(PathSelectors.any())
-                .build();
+    private ApiKey apiKey() {
+        return new ApiKey("Bearer", "Authorization", "header");
     }
+    
 }
