@@ -41,7 +41,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
-                .addResourceHandler("swagger-ui/")
+                .addResourceHandler("/swagger-ui/")
                 .addResourceLocations("classpath:/META-INF/resources/");
         registry
                 .addResourceHandler("/webjars/**")
@@ -65,7 +65,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 "Swagger configuration for Fitnesso Application",
                 "1.1.0",
                 "Free to use",
-                new springfox.documentation.service.Contact("Group A", " ", "chompfood@gmail.com"),
+                new springfox.documentation.service.Contact("https://decagonhq.com/"),
                 "Apache 2.0",
                 "https://fitnesso-app-new.herokuapp.com/swagger-ui/",
                 Collections.emptyList()
