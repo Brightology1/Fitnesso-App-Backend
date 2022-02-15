@@ -62,10 +62,10 @@ public class SwaggerConfig implements WebMvcConfigurer {
     private ApiInfo metaData() {
         return new ApiInfo(
                 "Java 009 - Fitnesso App",
-                "Swagger configuration for Fitnesso Application",
+                "Configuration for Fitnesso Application",
                 "1.1.0",
                 "Free to use",
-                new springfox.documentation.service.Contact("https://decagonhq.com/"),
+                new springfox.documentation.service.Contact("Fitnesso", " ", "https://decagonhq.com/"),
                 "Apache 2.0",
                 "https://fitnesso-app-new.herokuapp.com/swagger-ui/",
                 Collections.emptyList()
