@@ -27,7 +27,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .protocols(new HashSet<>(Arrays.asList("HTTP","HTTPs")))
+                //.protocols(new HashSet<>(Arrays.asList("HTTP","HTTPs")))
                 .apiInfo(metaData())
                 .securityContexts(List.of(securityContext()))
                 .securitySchemes(List.of(apiKey()))
@@ -41,7 +41,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
-                .addResourceHandler("swagger-ui.html")
+                .addResourceHandler("swagger-ui/")
                 .addResourceLocations("classpath:/META-INF/resources/");
         registry
                 .addResourceHandler("/webjars/**")
@@ -60,12 +60,16 @@ public class SwaggerConfig implements WebMvcConfigurer {
     }
 
     private ApiInfo metaData() {
-        return new ApiInfoBuilder()
-                .title("Java 009 - Fitnesso App")
-                .description("Swagger configuration for Fitnesso Application")
-                .version("1.1.0")
-                .license("Apache 2.0")
-                .build();
+        return new ApiInfo(
+                "Java 009 - Fitnesso App",
+                "Swagger configuration for Fitnesso Application",
+                "1.1.0",
+                "Free to use",
+                new springfox.documentation.service.Contact("Group A", " ", "chompfood@gmail.com"),
+                "Apache 2.0",
+                "https://fitnesso-app-new.herokuapp.com/swagger-ui/",
+                Collections.emptyList()
+        );
     }
 
     private ApiKey apiKey() {
