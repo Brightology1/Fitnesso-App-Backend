@@ -65,15 +65,17 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
         ProductResponseDto responseDto;
         ProductRequestDto productDto = new ProductRequestDto();
 
-        CloudinaryConfig cloudinaryConfig = new CloudinaryConfig();
-        String url = cloudinaryConfig.createImage(requestDto.getImage());
+        if(requestDto.getImage() != null){
+            CloudinaryConfig cloudinaryConfig = new CloudinaryConfig();
+            String url = cloudinaryConfig.createImage(requestDto.getImage());
+            productDto.setImage(url);
+        }
 
         productDto.setCategory(requestDto.getCategory().toUpperCase());
         productDto.setProductName(requestDto.getProductName().toUpperCase());
         productDto.setPrice(requestDto.getPrice());
         productDto.setDescription(requestDto.getDescription().toUpperCase());
         productDto.setProductType(requestDto.getProductType());
-        productDto.setImage(url);
         productDto.setMonthlySubscription(requestDto.getMonthlySubscription());
         productDto.setQuantity(requestDto.getQuantity());
         productDto.setStock(requestDto.getStock());
