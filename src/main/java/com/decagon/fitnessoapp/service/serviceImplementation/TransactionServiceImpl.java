@@ -1,6 +1,5 @@
 package com.decagon.fitnessoapp.service.serviceImplementation;
 
-import com.decagon.fitnessoapp.Email.API;
 import com.decagon.fitnessoapp.dto.transactionDto.TransactionRequestDTO;
 import com.decagon.fitnessoapp.dto.transactionDto.TransactionResponseDTO;
 import com.decagon.fitnessoapp.dto.transactionDto.response.PaymentResponse;
@@ -12,7 +11,6 @@ import com.decagon.fitnessoapp.model.product.TRANSACTION_STATUS;
 import com.decagon.fitnessoapp.repository.CheckOutRepository;
 import com.decagon.fitnessoapp.repository.OrderRepository;
 import com.decagon.fitnessoapp.service.TransactionService;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
