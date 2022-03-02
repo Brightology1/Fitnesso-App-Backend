@@ -142,8 +142,6 @@ public class PersonServiceImpl implements PersonService {
         return PersonResponse.builder().message("Email sent").build();
     }
 
-
-
     @Override
     public ResponseEntity<AuthResponse> loginUser(AuthRequest req) throws Exception {
         try {

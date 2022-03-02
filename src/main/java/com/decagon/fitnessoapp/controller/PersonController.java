@@ -37,7 +37,6 @@ public class PersonController {
     @GetMapping("/profile")
         public ResponseEntity<PersonInfoResponse> getUserInfo() throws Exception {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            System.out.println("AM i getting here??");
             return ResponseEntity.ok().body(personService.getInfo(authentication));
         }
 
