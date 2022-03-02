@@ -3,11 +3,13 @@ package com.decagon.fitnessoapp.service.serviceImplementation;
 import com.decagon.fitnessoapp.Email.EmailService;
 import com.decagon.fitnessoapp.config.cloudinary.CloudinaryConfig;
 import com.decagon.fitnessoapp.dto.*;
+import com.decagon.fitnessoapp.exception.AddressNotFoundException;
 import com.decagon.fitnessoapp.exception.CustomServiceExceptions;
 import com.decagon.fitnessoapp.exception.PersonNotFoundException;
+import com.decagon.fitnessoapp.model.user.Address;
 import com.decagon.fitnessoapp.model.user.Person;
 import com.decagon.fitnessoapp.model.user.ROLE_DETAIL;
-import com.decagon.fitnessoapp.model.user.Role;
+import com.decagon.fitnessoapp.repository.AddressRepository;
 import com.decagon.fitnessoapp.repository.PersonRepository;
 import com.decagon.fitnessoapp.security.JwtUtils;
 import com.decagon.fitnessoapp.service.PersonService;
@@ -18,7 +20,6 @@ import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -46,6 +47,7 @@ public class PersonServiceImpl implements PersonService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final PersonDetailsService userDetailsService;
+    private final AddressRepository addressRepository;
     @Value("${website.address}")
     private String website;
     @Value("${server.port}")
@@ -57,7 +59,7 @@ public class PersonServiceImpl implements PersonService {
                              PersonRepository personRepository, EmailValidator emailValidator, ModelMapper modelMapper,
                              EmailService emailSender, JwtUtils jwtUtils,
                              PersonDetailsService userDetailsService
-            , AuthenticationManager authenticationManager) {
+            , AuthenticationManager authenticationManager, AddressRepository addressRepository) {
         this.verificationTokenService = verificationTokenService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.personRepository = personRepository;
@@ -67,6 +69,7 @@ public class PersonServiceImpl implements PersonService {
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
         this.userDetailsService = userDetailsService;
+        this.addressRepository = addressRepository;
     }
 
     @Override
@@ -164,6 +167,22 @@ public class PersonServiceImpl implements PersonService {
         } catch (Exception e) {
             throw new Exception("incorrect username or password!", e);
         }
+    }
+
+    @Override
+    public PersonInfoResponse getInfo(Authentication auth) {
+        Person person = personRepository.findByUserName(auth.getName())
+                .orElseThrow(()-> new PersonNotFoundException("Person Not Found"));
+        System.out.println(person.toString());
+        Address address = addressRepository.findFirstByPerson(person)
+                .orElseThrow(()-> new AddressNotFoundException("Address Not Found"));
+        PersonInfoResponse personInfoResponse = new PersonInfoResponse();
+        System.out.println(address.toString());
+        AddressRequest addressRequest = new AddressRequest();
+        modelMapper.map(address, addressRequest);
+        modelMapper.map(person, personInfoResponse);
+        personInfoResponse.setAddress(addressRequest);
+        return personInfoResponse;
     }
 
     @Override
