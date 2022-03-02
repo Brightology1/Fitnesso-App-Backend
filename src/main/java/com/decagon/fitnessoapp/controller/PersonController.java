@@ -12,12 +12,14 @@ import com.decagon.fitnessoapp.service.VerificationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 @RequestMapping("/person")
 @AllArgsConstructor
@@ -30,6 +32,14 @@ public class PersonController {
         @PutMapping("/profile/edit/personinfo")
         public ResponseEntity<UpdatePersonResponse> editUserDetails(@RequestBody UpdatePersonRequest updatePersonDetails) {
             return ResponseEntity.ok().body( personService.updateUserDetails(updatePersonDetails));
+        }
+
+    @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
+    @GetMapping("/profile")
+        public ResponseEntity<PersonInfoResponse> getUserInfo() throws Exception {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            System.out.println("AM i getting here??");
+            return ResponseEntity.ok().body(personService.getInfo(authentication));
         }
 
         @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")

@@ -95,7 +95,7 @@
 //        order.setPerson(person);
 //        order.setShippingAddress(address);
 //        order.setShippingMethod(SHIPPING_METHOD.FLAT_RATE);
-//        //order.setCarts(new ArrayList<>());
+//        //order.setCartsr(new ArrayList<>());
 //        order.setTotalPrice(BigDecimal.valueOf(10.0));
 //
 //    }

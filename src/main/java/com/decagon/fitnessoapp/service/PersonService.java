@@ -4,12 +4,15 @@ import com.decagon.fitnessoapp.dto.*;
 import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 
 import java.io.IOException;
 
 public interface PersonService {
 
     ResponseEntity<AuthResponse> loginUser(AuthRequest req) throws Exception;
+
+    PersonInfoResponse getInfo(Authentication authentication) throws Exception;
 
     UpdatePersonResponse updateUserDetails(UpdatePersonRequest updatePersonRequest);
 
