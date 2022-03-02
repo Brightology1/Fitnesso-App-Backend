@@ -50,7 +50,7 @@ public class TransactionServiceImpl implements TransactionService {
         final String successfulTransaction = "http://" + website + ":" + port + "/transaction/success";
         final String failedTransaction = "http://" + website + ":" + port + "/transaction/fail";
         final String url = "https://api.paystack.co/transaction/initialize";
-        final String key = API.API_KEY_PAYMENT;
+        final String key = "API.API_KEY_PAYMENT";
         log.info(totalPrice.toString());
 
         transactionRequestDTO.setEmail(email);
@@ -79,7 +79,7 @@ public class TransactionServiceImpl implements TransactionService {
     public PaymentResponse confirmation(String reference) {
         final String url = "https://api.paystack.co/transaction/verify/" + reference;
         HttpHeaders headers = new HttpHeaders();
-        String key = API.API_KEY_PAYMENT;
+        String key = "API.API_KEY_PAYMENT";
         headers.set("Authorization", "Bearer " + key);
         HttpEntity<TransVerificationResponse> entity = new HttpEntity<>(headers);
         ResponseEntity<TransVerificationResponse> response = restTemplate
