@@ -34,7 +34,6 @@ public class PersonController {
             return ResponseEntity.ok().body( personService.updateUserDetails(updatePersonDetails));
         }
 
-    @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     @GetMapping("/profile")
         public ResponseEntity<PersonInfoResponse> getUserInfo() throws Exception {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
