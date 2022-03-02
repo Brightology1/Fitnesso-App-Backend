@@ -5,6 +5,7 @@ package com.decagon.fitnessoapp.Email;
 import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 
 import static org.mockito.Mockito.*;
 
@@ -12,6 +13,7 @@ public class EmailServiceImplTestCase {
 
 
     @Test
+    @Disabled
     public void sendMessage() throws MailjetSocketTimeoutException, MailjetException{
         String email ="chika@decagon.dev";
         String text ="how are you doing?";
