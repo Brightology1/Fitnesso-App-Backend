@@ -130,7 +130,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonResponse sendingEmail(String email) throws MailjetSocketTimeoutException, MailjetException {
+    public PersonResponse sendingEmail(String email){
         Person person = personRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomServiceExceptions("Email not registered"));
         String token = verificationTokenService.saveVerificationToken(person);
@@ -227,8 +227,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void resetPasswordMailSender(String email, String token) throws MailjetSocketTimeoutException,
-            MailjetException {
+    public void resetPasswordMailSender(String email, String token) {
         String resetPasswordLink = "http://"+ website + ":" + port + "/update_password?token=" + token;
         String subject = "Here's the link to reset your password";
         String content = "<p>Hello,</p>"

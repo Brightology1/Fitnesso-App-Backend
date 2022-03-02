@@ -49,6 +49,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable();
 
         http.addFilterBefore(jwtRequestFilters, UsernamePasswordAuthenticationFilter.class);
+        http.cors();
     }
 
     @Bean
