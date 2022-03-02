@@ -7,6 +7,6 @@ public class Api_Uri {
             "/v2/api-docs", "/configuration/**", "/swagger*/**","/swagger-ui/**", "/webjars/**",
             "/address/**", "/person/login", "/person/register", "/person/admin/register", "/product/**", "/order/**", "/articles/blogposts/**"
             , "/product/search",  "/checkout/**", "/carts/**", "/transaction/**", "https://api.paystack.co/**", "api.paystack.co/**",
-            "/test-carts/**"
+            "/test-carts/**","/person/confirm"
     };
 }
