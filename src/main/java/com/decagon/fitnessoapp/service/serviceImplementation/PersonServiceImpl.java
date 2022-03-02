@@ -137,7 +137,7 @@ public class PersonServiceImpl implements PersonService {
         Person person = personRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomServiceExceptions("Email not registered"));
         String token = verificationTokenService.saveVerificationToken(person);
-        String link = "http://"+ website + ":" + port + "/person/confirm?token=" + token;
+        String link = "http://"+ website +"/person/confirm?token=" + token;
         String subject = "Confirm your email";
         emailSender.sendMessage(subject, person.getEmail(), buildEmail(person.getFirstName(), link));
         return PersonResponse.builder().message("Email sent").build();
