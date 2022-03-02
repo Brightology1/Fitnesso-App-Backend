@@ -21,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/person")
 @AllArgsConstructor
+@CrossOrigin
 public class PersonController {
 
     private final PersonService personService;
@@ -41,6 +42,7 @@ public class PersonController {
         @PostMapping("/register")
         public ResponseEntity<?> register (@Valid @RequestBody PersonRequest personRequest) throws MailjetSocketTimeoutException, MailjetException, IOException {
             personRequest.setRoleDetail(ROLE_DETAIL.PREMIUM);
+            personRequest.setImage("null");
             return ResponseEntity.ok(personService.register(personRequest));
         }
 

@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/articles")
 @AllArgsConstructor
+@CrossOrigin
 public class BlogPostController {
 
     private final BlogPostService blogPostService;
