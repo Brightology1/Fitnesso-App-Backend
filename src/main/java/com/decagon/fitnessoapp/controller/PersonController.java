@@ -12,12 +12,14 @@ import com.decagon.fitnessoapp.service.VerificationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 @RequestMapping("/person")
 @AllArgsConstructor
@@ -31,6 +33,13 @@ public class PersonController {
         @PutMapping("/profile/edit/personinfo")
         public ResponseEntity<UpdatePersonResponse> editUserDetails(@RequestBody UpdatePersonRequest updatePersonDetails) {
             return ResponseEntity.ok().body( personService.updateUserDetails(updatePersonDetails));
+        }
+
+    @GetMapping("/profile")
+        public ResponseEntity<PersonInfoResponse> getUserInfo() throws Exception {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            System.out.println("AM i getting here??");
+            return ResponseEntity.ok().body(personService.getInfo(authentication));
         }
 
         @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
@@ -66,8 +75,13 @@ public class PersonController {
     }
 
         @GetMapping("/confirm")
-        public String confirm (@RequestParam("token") String token){
-            return verificationTokenService.confirmToken(token);
+        public ResponseEntity<PersonResponse> confirm (@RequestParam("token") String token){
+            return ResponseEntity.ok(verificationTokenService.confirmToken(token));
+        }
+
+        @PostMapping("/resend-token")
+        public ResponseEntity<PersonResponse> resendingEmailToken (@RequestBody EmailTokenRequest tokenRequest) throws MailjetSocketTimeoutException, MailjetException {
+            return ResponseEntity.ok(personService.sendingEmail(tokenRequest.getEmail()));
         }
 
         @PostMapping(path="/login", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -86,7 +100,7 @@ public class PersonController {
         }
 
         @PostMapping("/admin/reset_password")
-        public ResponseEntity<String> adminProcessResetPassword (@RequestBody EmailRequest resetEmail) throws MailjetSocketTimeoutException, MailjetException {
+        public ResponseEntity<PersonResponse> adminProcessResetPassword (@RequestBody EmailRequest resetEmail) throws MailjetSocketTimeoutException, MailjetException {
             return ResponseEntity.ok().body(personService.resetPasswordToken(resetEmail.getEmail()));
         }
 

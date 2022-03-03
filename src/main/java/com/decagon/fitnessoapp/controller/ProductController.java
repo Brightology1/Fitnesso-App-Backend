@@ -6,6 +6,8 @@ import com.decagon.fitnessoapp.dto.UserProductDto;
 import com.decagon.fitnessoapp.model.product.IntangibleProduct;
 import com.decagon.fitnessoapp.model.product.TangibleProduct;
 import com.decagon.fitnessoapp.service.ProductService;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,7 +25,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
-    public ResponseEntity<ProductResponseDto> addProduct(@RequestBody ProductRequestDto requestDto) {
+    public ResponseEntity<ProductResponseDto> addProduct(@RequestBody ProductRequestDto requestDto) throws IOException {
         return ResponseEntity.ok().body(productService.addProduct(requestDto));
     }
 
@@ -70,7 +72,7 @@ public class ProductController {
                                                                   @PathVariable("producttype") String productType){
         return ResponseEntity.ok().body(productService.viewProductDetails(productId, productType));
     }
-
+    @CrossOrigin("*")
     @GetMapping("/viewproducts/{pageNumber}")
     public ResponseEntity<?> viewAllProducts(@PathVariable(value="pageNumber") int pageNumber) {
         final Page<UserProductDto> allProducts = productService.getAllProducts(pageNumber);

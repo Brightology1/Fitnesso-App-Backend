@@ -36,7 +36,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests()
+        http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers(Api_Uri.PUBLIC_URIs)
                 .permitAll()
                 .antMatchers("/auth-dependent-routes").hasAnyRole(ROLE_DETAIL.PREMIUM.toString(), ROLE_DETAIL.ADMIN.toString())
@@ -49,6 +49,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable();
 
         http.addFilterBefore(jwtRequestFilters, UsernamePasswordAuthenticationFilter.class);
+        http.cors();
     }
 
     @Bean

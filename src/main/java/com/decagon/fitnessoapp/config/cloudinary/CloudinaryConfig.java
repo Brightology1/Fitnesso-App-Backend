@@ -12,6 +12,7 @@ import java.util.Map;
 @Configuration
 public class CloudinaryConfig {
 
+
     public String createImage(String name) throws IOException {
         Cloudinary cloudinary;
         Map<String, Object> config = new HashMap<>();
@@ -23,8 +24,11 @@ public class CloudinaryConfig {
         File file = new File(name);
         if(file.exists()){
             Map uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
+            System.out.println(uploadResult.get("url").toString());
             return uploadResult.get("url").toString();
+
         }
+
         return "null";
     }
 
