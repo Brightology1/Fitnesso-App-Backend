@@ -13,6 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class BlogPost {
 
     @Id
@@ -46,9 +47,9 @@ public class BlogPost {
     @com.sun.istack.NotNull
     private String biography;
 
-    // Added
-    @CreationTimestamp
+    
+    @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "creation_date", nullable = false, updatable = false)
+    @Column(name = "creation_date")
     private Date creationDate;
 }
