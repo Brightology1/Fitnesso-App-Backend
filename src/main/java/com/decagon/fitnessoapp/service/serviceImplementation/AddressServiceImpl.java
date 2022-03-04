@@ -1,6 +1,7 @@
 package com.decagon.fitnessoapp.service.serviceImplementation;
 
 import com.decagon.fitnessoapp.dto.AddressRequest;
+import com.decagon.fitnessoapp.dto.AddressResponse;
 import com.decagon.fitnessoapp.exception.PersonNotFoundException;
 import com.decagon.fitnessoapp.model.user.Address;
 import com.decagon.fitnessoapp.model.user.Person;
@@ -11,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -27,14 +30,19 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public ResponseEntity<?> createAddress(AddressRequest addressRequest) {
-        Person person = personRepository.findByUserName(addressRequest.getUserName())
-                .orElseThrow(() -> new PersonNotFoundException("You have to register first"));
+    public AddressResponse createAddress(AddressRequest addressRequest) {
+        AddressResponse addressResponse = new AddressResponse();
+        Optional<Person> person = personRepository.findByUserName(addressRequest.getUserName());
+        if(person.isEmpty()){
+            addressResponse.setMessage("incorrect username");
+            return addressResponse;
+        }
         Address address = new Address();
         modelMapper.map(addressRequest, address);
-        address.setPerson(person);
+        address.setPerson(person.get());
         addressRepository.save(address);
-        return ResponseEntity.ok().body("Address added successfully");
+        addressResponse.setMessage("Address added successfully");
+        return addressResponse;
     }
 
 

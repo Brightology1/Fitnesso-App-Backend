@@ -76,19 +76,25 @@ public class PersonServiceImpl implements PersonService {
     public PersonResponse register(PersonRequest personRequest) throws MailjetSocketTimeoutException, MailjetException, IOException {
         boolean isValidEmail = emailValidator.test(personRequest.getEmail());
         if(!isValidEmail){
-            throw new CustomServiceExceptions("Not a valid email");
+            return PersonResponse.builder().message("Not a valid email").build();
         }
 
         boolean isValidNumber = emailValidator.validatePhoneNumber(personRequest.getPhoneNumber());
 
         if(!isValidNumber){
-            throw new CustomServiceExceptions("Not a valid phone number");
+            return PersonResponse.builder().message("Not a valid phone Number").build();
         }
 
         boolean userExists = personRepository.findByEmail(personRequest.getEmail()).isPresent();
         if(userExists){
-            throw  new CustomServiceExceptions("email taken");
+            return PersonResponse.builder().message("email taken").build();
         }
+
+        boolean userNameExists = personRepository.findByUserName(personRequest.getUserName()).isPresent();
+        if(userNameExists){
+            return PersonResponse.builder().message("userName is taken").build();
+        }
+
 
         Person person = new Person();
         modelMapper.map(personRequest, person);
@@ -105,7 +111,7 @@ public class PersonServiceImpl implements PersonService {
         personRepository.save(person);
         sendingEmail(personRequest.getEmail());
         return PersonResponse.builder().firstName(person.getFirstName()).lastName(person.getLastName())
-                .email(person.getEmail()).build();
+                .email(person.getEmail()).message("Successful") .build();
     }
 
     @Override
