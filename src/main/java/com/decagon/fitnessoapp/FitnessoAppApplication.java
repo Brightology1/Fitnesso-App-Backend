@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.event.EventListener;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class FitnessoAppApplication {
 
 
