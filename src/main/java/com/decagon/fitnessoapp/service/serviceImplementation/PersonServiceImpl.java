@@ -13,8 +13,8 @@ import com.decagon.fitnessoapp.repository.AddressRepository;
 import com.decagon.fitnessoapp.repository.PersonRepository;
 import com.decagon.fitnessoapp.security.JwtUtils;
 import com.decagon.fitnessoapp.service.PersonService;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
+//import com.mailjet.client.errors.MailjetException;
+//import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
@@ -73,7 +73,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonResponse register(PersonRequest personRequest) throws MailjetSocketTimeoutException, MailjetException, IOException {
+    public PersonResponse register(PersonRequest personRequest) throws IOException {
         boolean isValidEmail = emailValidator.test(personRequest.getEmail());
         if(!isValidEmail){
             return PersonResponse.builder().message("Not a valid email").build();
@@ -226,7 +226,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonResponse resetPasswordToken(String email) throws MailjetSocketTimeoutException, MailjetException {
+    public PersonResponse resetPasswordToken(String email) {
         Person person = personRepository.findByEmail(email)
                 .orElseThrow(()-> new PersonNotFoundException("Email not Registered"));
         String token = RandomString.make(64);
