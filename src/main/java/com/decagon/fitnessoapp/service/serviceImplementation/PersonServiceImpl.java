@@ -180,6 +180,8 @@ public class PersonServiceImpl implements PersonService {
         modelMapper.map(address, addressRequest);
         modelMapper.map(person, personInfoResponse);
         personInfoResponse.setAddress(addressRequest);
+        personInfoResponse.setDobText(personInfoResponse.setDate(personInfoResponse.getDateOfBirth()));
+        System.out.println(personInfoResponse.getDobText());
         return personInfoResponse;
     }
 

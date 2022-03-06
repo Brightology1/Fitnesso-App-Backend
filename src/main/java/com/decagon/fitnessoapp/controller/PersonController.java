@@ -29,10 +29,10 @@ public class PersonController {
     private final FavouriteService favouriteService;
     public final VerificationService verificationTokenService;
 
-        @PutMapping("/profile/edit/personinfo")
-        public ResponseEntity<UpdatePersonResponse> editUserDetails(@RequestBody UpdatePersonRequest updatePersonDetails) {
-            return ResponseEntity.ok().body( personService.updateUserDetails(updatePersonDetails));
-        }
+    @PutMapping("/profile/edit/personinfo")
+    public ResponseEntity<UpdatePersonResponse> editUserDetails(@RequestBody UpdatePersonRequest updatePersonDetails) {
+        return ResponseEntity.ok().body( personService.updateUserDetails(updatePersonDetails));
+    }
 
     @GetMapping("/profile")
         public ResponseEntity<PersonInfoResponse> getUserInfo() throws Exception {
@@ -80,6 +80,7 @@ public class PersonController {
         public ResponseEntity<PersonResponse> resendingEmailToken (@RequestBody EmailTokenRequest tokenRequest) throws MailjetSocketTimeoutException, MailjetException {
             return ResponseEntity.ok(personService.sendingEmail(tokenRequest.getEmail()));
         }
+
 
         @PostMapping(path="/login", produces = MediaType.APPLICATION_JSON_VALUE)
         public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest req) throws Exception {
