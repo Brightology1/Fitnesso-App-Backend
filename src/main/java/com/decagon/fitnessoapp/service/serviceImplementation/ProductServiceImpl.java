@@ -195,13 +195,18 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
                 .map(x -> modelMapper.map(x, UserProductDto.class))
                 .collect(Collectors.toList());
 
-        Collections.sort(intangibleDtos);
-        Collections.sort(tangibleDtos);
+//        Collections.sort(intangibleDtos);
+//        Collections.sort(tangibleDtos);
 
         List<UserProductDto> productDtos = new ArrayList<>(intangibleDtos);
         productDtos.addAll(tangibleDtos);
 
+        Collections.sort(productDtos);
         return productDtos;
+    }
+    @Override
+    public List<UserProductDto> searchAllProducts() {
+        return getDtoList();
     }
     @Override
     public List<?> searchProduct(String text) {

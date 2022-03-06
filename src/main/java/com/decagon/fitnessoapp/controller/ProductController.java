@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/product")
+@CrossOrigin(origins = "http://localhost:3000/")
 @AllArgsConstructor
 public class ProductController {
 
@@ -76,6 +77,12 @@ public class ProductController {
     @GetMapping("/viewproducts/{pageNumber}")
     public ResponseEntity<?> viewAllProducts(@PathVariable(value="pageNumber") int pageNumber) {
         final Page<UserProductDto> allProducts = productService.getAllProducts(pageNumber);
+        return ResponseEntity.ok(allProducts);
+    }
+    @CrossOrigin("*")
+    @GetMapping("/viewproducts")
+    public ResponseEntity<?> searchAllProducts() {
+        final List<UserProductDto> allProducts = productService.searchAllProducts();
         return ResponseEntity.ok(allProducts);
     }
 

@@ -23,7 +23,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/person")
 @AllArgsConstructor
-@CrossOrigin
 public class PersonController {
 
     private final PersonService personService;
