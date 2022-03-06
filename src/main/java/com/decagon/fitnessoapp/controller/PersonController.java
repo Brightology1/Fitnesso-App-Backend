@@ -3,8 +3,8 @@ package com.decagon.fitnessoapp.controller;
 import com.decagon.fitnessoapp.model.user.ROLE_DETAIL;
 import com.decagon.fitnessoapp.service.FavouriteService;
 import com.decagon.fitnessoapp.service.PersonService;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
+//import com.mailjet.client.errors.MailjetException;
+//import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import com.decagon.fitnessoapp.dto.*;
@@ -48,13 +48,13 @@ public class PersonController {
         }
 
         @PostMapping("/register")
-        public ResponseEntity<?> register (@Valid @RequestBody PersonRequest personRequest) throws MailjetSocketTimeoutException, MailjetException, IOException {
+        public ResponseEntity<?> register (@Valid @RequestBody PersonRequest personRequest) throws IOException {
             personRequest.setRoleDetail(ROLE_DETAIL.PREMIUM);
             return ResponseEntity.ok(personService.register(personRequest));
         }
 
         @PostMapping("/admin/register")
-        public ResponseEntity<?> registerAdmin (@Valid @RequestBody PersonRequest personRequest) throws MailjetSocketTimeoutException, MailjetException, IOException {
+        public ResponseEntity<?> registerAdmin (@Valid @RequestBody PersonRequest personRequest) throws IOException {
             personRequest.setRoleDetail(ROLE_DETAIL.ADMIN);
             return ResponseEntity.ok(personService.register(personRequest));
         }
@@ -78,7 +78,7 @@ public class PersonController {
         }
 
         @PostMapping("/resend-token")
-        public ResponseEntity<PersonResponse> resendingEmailToken (@RequestBody EmailTokenRequest tokenRequest) throws MailjetSocketTimeoutException, MailjetException {
+        public ResponseEntity<PersonResponse> resendingEmailToken (@RequestBody EmailTokenRequest tokenRequest) {
             return ResponseEntity.ok(personService.sendingEmail(tokenRequest.getEmail()));
         }
 
@@ -88,7 +88,7 @@ public class PersonController {
         }
 
         @PostMapping("/reset_password")
-        public ResponseEntity<?> processResetPassword (@RequestBody EmailRequest resetEmail) throws MailjetSocketTimeoutException, MailjetException {
+        public ResponseEntity<?> processResetPassword (@RequestBody EmailRequest resetEmail) {
             return ResponseEntity.ok().body(personService.resetPasswordToken(resetEmail.getEmail()));
         }
 
@@ -98,7 +98,7 @@ public class PersonController {
         }
 
         @PostMapping("/admin/reset_password")
-        public ResponseEntity<PersonResponse> adminProcessResetPassword (@RequestBody EmailRequest resetEmail) throws MailjetSocketTimeoutException, MailjetException {
+        public ResponseEntity<PersonResponse> adminProcessResetPassword (@RequestBody EmailRequest resetEmail) {
             return ResponseEntity.ok().body(personService.resetPasswordToken(resetEmail.getEmail()));
         }
 
