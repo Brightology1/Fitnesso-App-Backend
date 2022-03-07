@@ -69,6 +69,8 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
             CloudinaryConfig cloudinaryConfig = new CloudinaryConfig();
             String url = cloudinaryConfig.createImage(requestDto.getImage());
             productDto.setImage(url);
+        }else{
+            productDto.setImage("null");
         }
 
         productDto.setCategory(requestDto.getCategory().toUpperCase());
