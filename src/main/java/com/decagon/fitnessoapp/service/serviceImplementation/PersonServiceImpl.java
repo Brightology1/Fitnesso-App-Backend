@@ -29,7 +29,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -90,7 +93,22 @@ public class PersonServiceImpl implements PersonService {
 
         boolean userNameExists = personRepository.findByUserName(personRequest.getUserName()).isPresent();
         if(userNameExists){
-            return PersonResponse.builder().message("userName is taken").build();
+            Random random = new Random();
+            List<String> newUserName = new ArrayList<>();
+            String name2 ="";
+
+            while (newUserName.size() < 3) {
+                int a = random.nextInt(1000);
+                String name = personRequest.getUserName()+""+a;
+                boolean uname = personRepository.findByUserName(name).isPresent();
+                if(!uname){
+                    newUserName.add(name);
+                }
+            }
+            for(String s: newUserName){
+                name2 = name2 + s+"  ";
+            }
+            return PersonResponse.builder().message("userName is taken, "+name2).build();
         }
 
 
