@@ -2,7 +2,6 @@ package com.decagon.fitnessoapp.service.serviceImplementation;
 
 import com.decagon.fitnessoapp.dto.AddressRequest;
 import com.decagon.fitnessoapp.dto.AddressResponse;
-import com.decagon.fitnessoapp.exception.PersonNotFoundException;
 import com.decagon.fitnessoapp.model.user.Address;
 import com.decagon.fitnessoapp.model.user.Person;
 import com.decagon.fitnessoapp.repository.AddressRepository;
@@ -10,7 +9,6 @@ import com.decagon.fitnessoapp.repository.PersonRepository;
 import com.decagon.fitnessoapp.service.AddressService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

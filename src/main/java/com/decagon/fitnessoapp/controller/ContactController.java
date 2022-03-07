@@ -1,10 +1,8 @@
 package com.decagon.fitnessoapp.controller;
 
-import com.decagon.fitnessoapp.dto.ContactResponse;
 import com.decagon.fitnessoapp.dto.transactionDto.ContactRequest;
 import com.decagon.fitnessoapp.model.user.Contact;
 import com.decagon.fitnessoapp.service.ContactService;
-import com.decagon.fitnessoapp.service.serviceImplementation.ContactServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
