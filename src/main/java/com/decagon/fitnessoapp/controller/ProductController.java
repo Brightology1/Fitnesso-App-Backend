@@ -68,8 +68,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/viewproductdetails/{Id}/{producttype}")
-    public ResponseEntity<ProductResponseDto> viewProductDetailForAdmin(@PathVariable("Id") Long productId,
-                                                                  @PathVariable("producttype") String productType){
+    public ResponseEntity<ProductResponseDto> viewProductDetailForAdmin(@PathVariable("Id") Long productId, @PathVariable("producttype") String productType){
         return ResponseEntity.ok().body(productService.viewProductDetails(productId, productType));
     }
 
