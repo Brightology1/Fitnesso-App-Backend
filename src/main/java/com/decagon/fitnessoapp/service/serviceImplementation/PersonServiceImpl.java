@@ -218,8 +218,6 @@ public class PersonServiceImpl implements PersonService {
         Person person = personRepository.findByEmail(email)
                 .orElseThrow(()-> new PersonNotFoundException("Email not Registered"));
         String token = RandomString.make(64);
-        //TODO:remove after testing app
-        System.out.println(token);
         person.setResetPasswordToken(token);
         personRepository.save(person);
         resetPasswordMailSender(person.getEmail(), token);
