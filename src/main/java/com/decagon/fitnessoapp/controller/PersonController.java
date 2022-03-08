@@ -23,7 +23,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/person")
 @AllArgsConstructor
-@CrossOrigin
 public class PersonController {
 
     private final PersonService personService;
@@ -108,6 +107,8 @@ public class PersonController {
         public ResponseEntity<?> adminUpdatePassword(@RequestBody ResetPasswordRequest passwordRequest, @RequestParam(value = "token") String token){
             return ResponseEntity.ok().body(personService.updateResetPassword(passwordRequest, token));
         }
+
+
         @PostMapping("/add_or_delete_favourite/{productId}")
         public ResponseEntity<String> addOrDeleteFavourite(@PathVariable("productId") Long productId, Authentication authentication){
             return favouriteService.addOrDeleteFavourite(productId, authentication);

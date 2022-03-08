@@ -61,4 +61,10 @@ public class BlogPostController {
         final Page<BlogPostResponse> blogPosts = blogPostService.getAllBlogPosts(pageNumber);
         return new ResponseEntity<>(blogPosts, HttpStatus.OK);
     }
+
+    @GetMapping("/blogposts/single_article/{postId}")
+    public ResponseEntity<?> getPostById(@PathVariable Long postId){
+        BlogPostResponse blogPostResponse = blogPostService.getPostById(postId);
+        return new ResponseEntity<>(blogPostResponse, HttpStatus.OK);
+    }
 }

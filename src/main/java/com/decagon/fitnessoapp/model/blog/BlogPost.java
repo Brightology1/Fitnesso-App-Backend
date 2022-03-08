@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,6 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class BlogPost {
 
     @Id
@@ -47,8 +50,14 @@ public class BlogPost {
     private String biography;
 
     // Added
-    @CreationTimestamp
+//    @CreationTimestamp
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @Column(name = "creation_date", nullable = false, updatable = false)
+//    private Date creationDate;
+
+
+    @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "creation_date", nullable = false, updatable = false)
+    @Column(name = "creation_date")
     private Date creationDate;
 }
