@@ -193,11 +193,10 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
                 .map(x -> modelMapper.map(x, UserProductDto.class))
                 .collect(Collectors.toList());
 
-        Collections.sort(intangibleDtos);
-        Collections.sort(tangibleDtos);
-
         List<UserProductDto> productDtos = new ArrayList<>(intangibleDtos);
         productDtos.addAll(tangibleDtos);
+        Collections.sort(productDtos);
+        System.out.println("The list size is: " + productDtos.size());
 
         return productDtos;
     }
