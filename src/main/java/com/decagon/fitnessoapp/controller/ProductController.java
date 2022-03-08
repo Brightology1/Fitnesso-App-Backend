@@ -79,6 +79,12 @@ public class ProductController {
         return ResponseEntity.ok(allProducts);
     }
 
+    @GetMapping("/viewproducts")
+    public ResponseEntity<?> searchAllProducts() {
+        final List<UserProductDto> allProducts = productService.searchAllProducts();
+        return ResponseEntity.ok(allProducts);
+    }
+
     @GetMapping("/search/{freeText}")
     public ResponseEntity<List<?>> searchProduct(@PathVariable String freeText){
         List<?> products = productService.searchProduct(freeText);
