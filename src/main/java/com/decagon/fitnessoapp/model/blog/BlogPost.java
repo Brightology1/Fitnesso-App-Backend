@@ -49,7 +49,6 @@ public class BlogPost {
     @com.sun.istack.NotNull
     private String biography;
 
-    
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date")

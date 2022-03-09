@@ -48,6 +48,7 @@ public class PersonController {
         @PostMapping("/register")
         public ResponseEntity<?> register (@Valid @RequestBody PersonRequest personRequest) throws IOException {
             personRequest.setRoleDetail(ROLE_DETAIL.PREMIUM);
+            personRequest.setImage("null");
             return ResponseEntity.ok(personService.register(personRequest));
         }
 
@@ -105,6 +106,8 @@ public class PersonController {
         public ResponseEntity<?> adminUpdatePassword(@RequestBody ResetPasswordRequest passwordRequest, @RequestParam(value = "token") String token){
             return ResponseEntity.ok().body(personService.updateResetPassword(passwordRequest, token));
         }
+
+
         @PostMapping("/add_or_delete_favourite/{productId}")
         public ResponseEntity<String> addOrDeleteFavourite(@PathVariable("productId") Long productId, Authentication authentication){
             return favouriteService.addOrDeleteFavourite(productId, authentication);

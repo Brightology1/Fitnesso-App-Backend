@@ -21,5 +21,5 @@ public interface BlogPostService {
 
     BlogPostResponse addBlogPost(BlogContext blogContext, Authentication authentication);
 
-
+    BlogPostResponse getPostById(Long id);
 }

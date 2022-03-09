@@ -10,6 +10,7 @@ import com.decagon.fitnessoapp.repository.BlogPostRepository;
 import com.decagon.fitnessoapp.repository.PersonRepository;
 import com.decagon.fitnessoapp.service.BlogPostService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.internal.util.logging.LoggerFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+//import org.slf4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +31,7 @@ public class BlogPostServiceImpl implements BlogPostService {
     private final BlogPostRepository blogPostRepository;
     private final PersonRepository personRepository;
     private final ModelMapper modelMapper;
+
 
     @Override
     public List<BlogPostResponse> getAllPosts(Integer pageNo, Integer pageSize, String sortBy) {
@@ -104,6 +108,14 @@ public class BlogPostServiceImpl implements BlogPostService {
         BlogPost blogPost = modelMapper.map(blogContext, BlogPost.class);
         blogPost.setPerson(person);
         blogPostRepository.save(blogPost);
+        return modelMapper.map(blogPost, BlogPostResponse.class);
+    }
+
+    @Override
+    public BlogPostResponse getPostById(Long id) {
+        System.out.println("Before Blog post");
+        BlogPost blogPost = blogPostRepository.getById(id);
+        System.out.println("After BlogPost" + blogPost);
         return modelMapper.map(blogPost, BlogPostResponse.class);
     }
 }
