@@ -181,11 +181,6 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
         return new PageImpl<>(activityPage, productPage, dtoList.size());
     }
 
-    @Override
-    public List<UserProductDto> getAllProductsNP() {
-        return null;
-    }
-
     private List<UserProductDto> getDtoList() {
         List<IntangibleProduct> intangibleProducts = intangibleProductRepository.findAll();
         List<TangibleProduct> tangibleProducts = tangibleProductRepository.findAll();
@@ -234,11 +229,36 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
 
     @Override
     public List<UserProductDto> getProductsNP() {
-        return null;
+        List<TangibleProduct> productList = tangibleProductRepository.findAll();
+        final List<UserProductDto> productDtos = productList.stream()
+                .map(x -> modelMapper.map(x, UserProductDto.class))
+                .collect(Collectors.toList());
+        Collections.sort(productDtos);
+        return productDtos;
     }
 
     @Override
     public List<UserProductDto> getServicesNP() {
-        return null;
+        List<IntangibleProduct> productList = intangibleProductRepository.findAll();
+        final List<UserProductDto> productDtos = productList.stream()
+                .map(x -> modelMapper.map(x, UserProductDto.class))
+                .collect(Collectors.toList());
+        Collections.sort(productDtos);
+        return productDtos;
+    }
+
+    @Override
+    public List<UserProductDto> getAllProductsNP() {
+        List<UserProductDto> dtoList = getDtoList();
+        int pageSize = 10;
+        int pageNumber = 1;
+        int skipCount = (pageNumber - 1) * pageSize;
+        List<UserProductDto> activityPage = dtoList
+                .stream()
+                .skip(skipCount)
+                .limit(pageSize)
+                .collect(Collectors.toList());
+
+        return dtoList;
     }
 }
