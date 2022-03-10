@@ -75,12 +75,14 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
 
 
         if (productDto.getProductType().equals("PRODUCT")) {
-            TangibleProduct tangibleProduct = tangibleProductRepository.findByProductNameAndCategoryAndDescriptionAndImageAndPriceAndQuantity().orElse(null);
+            TangibleProduct tangibleProduct = tangibleProductRepository.findByProductNameAndCategoryAndDescriptionAndPriceAndQuantity(
+                    requestDto.getProductName(), requestDto.getCategory().toUpperCase(), requestDto.getDescription(), requestDto.getPrice(), requestDto.getQuantity()).orElse(null);
             if(!tangibleProduct.equals(null)) {
                 Long availStock = tangibleProduct.getStock();
                 long newQuantity = availStock + requestDto.getQuantity();
                 tangibleProduct.setQuantity((int) newQuantity);
                 tangibleProductRepository.save(tangibleProduct);
+                return modelMapper.map(tangibleProduct, ProductResponseDto.class);
             }
             TangibleProduct newProduct;
             newProduct = tangibleProductRepository.save(modelMapper.map(productDto, TangibleProduct.class));
@@ -264,47 +266,5 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
                 .collect(Collectors.toList());
 
         return dtoList;
-    }
-
-    public ProductResponseDto addProductCheck(ProductRequestDto requestDto) throws IOException {
-        ProductResponseDto responseDto;
-        ProductRequestDto productDto = new ProductRequestDto();
-
-        CloudinaryConfig cloudinaryConfig = new CloudinaryConfig();
-        String url = cloudinaryConfig.createImage(requestDto.getImage());
-
-        productDto.setCategory(requestDto.getCategory().toUpperCase());
-        productDto.setProductName(requestDto.getProductName().toUpperCase());
-        productDto.setPrice(requestDto.getPrice());
-        productDto.setDescription(requestDto.getDescription().toUpperCase());
-        productDto.setProductType(requestDto.getProductType());
-        productDto.setImage(url);
-        productDto.setMonthlySubscription(requestDto.getMonthlySubscription());
-        productDto.setQuantity(requestDto.getQuantity());
-        productDto.setStock(requestDto.getStock());
-
-
-        if (productDto.getProductType().equals("PRODUCT")) {
-            TangibleProduct tangibleProduct = tangibleProductRepository.findByProductNameAndCategoryAndDescriptionAndImageAndPriceAndQuantity().orElse(null);
-            if(!tangibleProduct.equals(null)) {
-                Long availStock = tangibleProduct.getStock();
-                long newQuantity = availStock + requestDto.getQuantity();
-                tangibleProduct.setQuantity((int) newQuantity);
-                tangibleProductRepository.save(tangibleProduct);
-            }
-            TangibleProduct newProduct;
-            newProduct = tangibleProductRepository.save(modelMapper.map(productDto, TangibleProduct.class));
-            responseDto = modelMapper.map(newProduct, ProductResponseDto.class);
-            return responseDto;
-
-        } else if (productDto.getProductType().equals("SERVICE")) {
-
-            IntangibleProduct newProduct;
-
-            newProduct = intangibleProductRepository.save(modelMapper.map(productDto, IntangibleProduct.class));
-            responseDto = modelMapper.map(newProduct, ProductResponseDto.class);
-            return responseDto;
-        }
-        throw new IllegalStateException("Check if all fields were filled properly");
     }
 }

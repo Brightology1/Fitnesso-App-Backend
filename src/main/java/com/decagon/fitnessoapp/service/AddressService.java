@@ -5,7 +5,7 @@ import com.decagon.fitnessoapp.dto.AddressResponse;
 import org.springframework.http.ResponseEntity;
 
 public interface AddressService {
-    ResponseEntity<?> createAddress(AddressRequest addressRequest);
+    AddressResponse createAddress(AddressRequest addressRequest);
 
     AddressRequest updateAddress(AddressRequest request);
 
