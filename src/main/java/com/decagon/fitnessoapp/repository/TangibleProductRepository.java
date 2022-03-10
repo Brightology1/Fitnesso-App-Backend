@@ -1,6 +1,8 @@
 package com.decagon.fitnessoapp.repository;
 
 import com.decagon.fitnessoapp.model.product.TangibleProduct;
+
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +17,5 @@ public interface TangibleProductRepository extends JpaRepository<TangibleProduct
 
     @Query("SELECT t FROM TangibleProduct t WHERE CONCAT(t.category, t.productName, t.description) LIKE %?1%")
     List<TangibleProduct> findTangibleProductByCategoryOrProductNameOrByDescription(String freeText);
+    Optional<TangibleProduct> findByProductNameAndCategoryAndDescriptionAndPriceAndQuantity(String productName, String category, String description, BigDecimal price, Integer quantity);
 }

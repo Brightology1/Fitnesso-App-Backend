@@ -28,7 +28,13 @@ public interface ProductService {
 
     Page<UserProductDto> getAllProducts(int pageNumber);
 
+    List<UserProductDto> getAllProductsNP();
+  
     List<UserProductDto> searchAllProducts();
 
     List<?> searchProduct(String text);
+
+    List<UserProductDto> getProductsNP();
+
+    List<UserProductDto> getServicesNP();
 }
