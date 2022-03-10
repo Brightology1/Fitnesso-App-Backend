@@ -5,4 +5,8 @@ import org.springframework.http.ResponseEntity;
 
 public interface AddressService {
     ResponseEntity<?> createAddress(AddressRequest addressRequest);
+
+    AddressRequest updateAddress(AddressRequest request);
+
+    String deleteAddress(Long id);
 }

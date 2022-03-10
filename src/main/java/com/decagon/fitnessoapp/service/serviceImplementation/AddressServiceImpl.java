@@ -1,6 +1,7 @@
 package com.decagon.fitnessoapp.service.serviceImplementation;
 
 import com.decagon.fitnessoapp.dto.AddressRequest;
+import com.decagon.fitnessoapp.exception.AddressNotFoundException;
 import com.decagon.fitnessoapp.exception.PersonNotFoundException;
 import com.decagon.fitnessoapp.model.user.Address;
 import com.decagon.fitnessoapp.model.user.Person;
@@ -35,6 +36,29 @@ public class AddressServiceImpl implements AddressService {
         address.setPerson(person);
         addressRepository.save(address);
         return ResponseEntity.ok().body("Address added successfully");
+    }
+
+    @Override
+    public AddressRequest updateAddress(AddressRequest request) {
+        final Address previousAdd = addressRepository.findById(request.getId())
+                .orElseThrow(() ->
+                        new AddressNotFoundException("Address not found"));
+
+        previousAdd.setCity(request.getCity());
+        previousAdd.setState(request.getState());
+        previousAdd.setCountry(request.getCountry());
+        previousAdd.setStreetDetail(request.getStreetDetail());
+        previousAdd.setZipCode(request.getZipCode());
+        Address savedAdd = addressRepository.save(previousAdd);
+        return modelMapper.map(savedAdd, AddressRequest.class);
+    }
+
+    @Override
+    public String deleteAddress(Long id) {
+        final Address address = addressRepository.findById(id).orElseThrow(
+                () -> new AddressNotFoundException("Address not found"));
+        addressRepository.delete(address);
+        return "Address deleted successfully!";
     }
 
 
