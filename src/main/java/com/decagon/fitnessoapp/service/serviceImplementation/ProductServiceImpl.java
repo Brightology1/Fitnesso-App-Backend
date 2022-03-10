@@ -1,6 +1,5 @@
 package com.decagon.fitnessoapp.service.serviceImplementation;
 
-import com.decagon.fitnessoapp.config.cloudinary.CloudinaryConfig;
 import com.decagon.fitnessoapp.dto.ProductRequestDto;
 import com.decagon.fitnessoapp.dto.ProductResponseDto;
 import com.decagon.fitnessoapp.dto.UserProductDto;
@@ -61,13 +60,10 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
         ProductRequestDto productDto = new ProductRequestDto();
 
         if(requestDto.getImage() != null){
-            CloudinaryConfig cloudinaryConfig = new CloudinaryConfig();
-            String url = cloudinaryConfig.createImage(requestDto.getImage());
-            productDto.setImage(url);
+            productDto.setImage(requestDto.getImage());
         }else{
             productDto.setImage("null");
         }
-
         productDto.setCategory(requestDto.getCategory().toUpperCase());
         productDto.setProductName(requestDto.getProductName().toUpperCase());
         productDto.setPrice(requestDto.getPrice());

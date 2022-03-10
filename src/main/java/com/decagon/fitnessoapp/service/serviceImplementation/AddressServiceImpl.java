@@ -38,7 +38,7 @@ public class AddressServiceImpl implements AddressService {
         Address address = new Address();
         modelMapper.map(addressRequest, address);
         address.setPerson(person.get());
-        addressRepository.save(address);
+//        addressRepository.save(address);
         addressResponse.setMessage("Address added successfully");
         return addressResponse;
     }

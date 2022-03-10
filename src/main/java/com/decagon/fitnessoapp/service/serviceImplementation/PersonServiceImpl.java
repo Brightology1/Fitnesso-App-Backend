@@ -1,7 +1,6 @@
 package com.decagon.fitnessoapp.service.serviceImplementation;
 
 import com.decagon.fitnessoapp.Email.EmailService;
-import com.decagon.fitnessoapp.config.cloudinary.CloudinaryConfig;
 import com.decagon.fitnessoapp.dto.*;
 import com.decagon.fitnessoapp.exception.AddressNotFoundException;
 import com.decagon.fitnessoapp.exception.CustomServiceExceptions;
@@ -90,26 +89,6 @@ public class PersonServiceImpl implements PersonService {
             return PersonResponse.builder().message("email taken").build();
         }
 
-        boolean userNameExists = personRepository.findByUserName(personRequest.getUserName()).isPresent();
-        if(userNameExists){
-            Random random = new Random();
-            List<String> newUserName = new ArrayList<>();
-            String name2 ="";
-
-            while (newUserName.size() < 3) {
-                int a = random.nextInt(1000);
-                String name = personRequest.getUserName()+""+a;
-                boolean uname = personRepository.findByUserName(name).isPresent();
-                if(!uname){
-                    newUserName.add(name);
-                }
-            }
-            for(String s: newUserName){
-                name2 = name2 + s+"  ";
-            }
-            return PersonResponse.builder().message("userName is taken, "+name2).build();
-        }
-
 
         Person person = new Person();
         modelMapper.map(personRequest, person);
@@ -118,13 +97,9 @@ public class PersonServiceImpl implements PersonService {
         person.setPassword(encodedPassword);
         String token = RandomString.make(64);
         person.setResetPasswordToken(token);
-        if(personRequest.getImage() != null){
-            CloudinaryConfig cloudinaryConfig = new CloudinaryConfig();
-            String url = cloudinaryConfig.createImage(person.getImage());
-            person.setImage(url);
-        }
+
         personRepository.save(person);
-        sendingEmail(personRequest.getEmail());
+//        sendingEmail(personRequest.getEmail());
         return PersonResponse.builder().firstName(person.getFirstName()).lastName(person.getLastName())
                 .email(person.getEmail()).message("Successful") .build();
     }
