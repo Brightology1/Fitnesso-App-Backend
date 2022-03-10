@@ -3,6 +3,8 @@ package com.decagon.fitnessoapp.repository;
 import com.decagon.fitnessoapp.model.product.IntangibleProduct;
 import com.decagon.fitnessoapp.model.product.TangibleProduct;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -12,4 +14,6 @@ public interface IntangibleProductRepository extends JpaRepository<IntangiblePro
 
     @Query("SELECT i FROM IntangibleProduct i WHERE CONCAT(i.category, i.productName, i.description) LIKE %?1%")
     List<IntangibleProduct> findIntangibleProductByCategoryOrProductNameOrByDescription(String freeText);
+
+    Optional<IntangibleProduct> findByProductNameAndCategoryAndDescriptionAndImageAndMonthlySubscriptionAndPriceAndCategory();
 }

@@ -181,6 +181,11 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
         return new PageImpl<>(activityPage, productPage, dtoList.size());
     }
 
+    @Override
+    public List<UserProductDto> getAllProductsNP() {
+        return null;
+    }
+
     private List<UserProductDto> getDtoList() {
         List<IntangibleProduct> intangibleProducts = intangibleProductRepository.findAll();
         List<TangibleProduct> tangibleProducts = tangibleProductRepository.findAll();
@@ -225,5 +230,15 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
 
         }
         return searchResult;
+    }
+
+    @Override
+    public List<UserProductDto> getProductsNP() {
+        return null;
+    }
+
+    @Override
+    public List<UserProductDto> getServicesNP() {
+        return null;
     }
 }
