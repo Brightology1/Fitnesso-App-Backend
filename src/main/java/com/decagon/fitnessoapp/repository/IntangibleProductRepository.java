@@ -14,6 +14,4 @@ public interface IntangibleProductRepository extends JpaRepository<IntangiblePro
 
     @Query("SELECT i FROM IntangibleProduct i WHERE CONCAT(i.category, i.productName, i.description) LIKE %?1%")
     List<IntangibleProduct> findIntangibleProductByCategoryOrProductNameOrByDescription(String freeText);
-
-    Optional<IntangibleProduct> findByProductNameAndCategoryAndDescriptionAndImageAndMonthlySubscriptionAndPriceAndCategory();
 }

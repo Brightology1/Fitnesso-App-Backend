@@ -80,15 +80,19 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
 
 
         if (productDto.getProductType().equals("PRODUCT")) {
+            TangibleProduct tangibleProduct = tangibleProductRepository.findByProductNameAndCategoryAndDescriptionAndImageAndPriceAndQuantity().orElse(null);
+            if(!tangibleProduct.equals(null)) {
+                Long availStock = tangibleProduct.getStock();
+                long newQuantity = availStock + requestDto.getQuantity();
+                tangibleProduct.setQuantity((int) newQuantity);
+                tangibleProductRepository.save(tangibleProduct);
+            }
             TangibleProduct newProduct;
-
-
             newProduct = tangibleProductRepository.save(modelMapper.map(productDto, TangibleProduct.class));
             responseDto = modelMapper.map(newProduct, ProductResponseDto.class);
            return responseDto;
 
         } else if (productDto.getProductType().equals("SERVICE")) {
-
             IntangibleProduct newProduct;
 
             newProduct = intangibleProductRepository.save(modelMapper.map(productDto, IntangibleProduct.class));
