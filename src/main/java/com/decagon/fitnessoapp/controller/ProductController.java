@@ -29,6 +29,21 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.addProduct(requestDto));
     }
 
+    @GetMapping("/view_all_products_np")
+    public ResponseEntity<List<UserProductDto>> viewAllProductsNP() {
+        return ResponseEntity.ok().body(productService.getAllProductsNP());
+    }
+
+    @GetMapping("/view_products_np")
+    public ResponseEntity<List<UserProductDto>> viewProductsNP() {
+        return ResponseEntity.ok().body(productService.getProductsNP());
+    }
+
+    @GetMapping("/view_services_np")
+    public ResponseEntity<List<UserProductDto>> viewServicesNP() {
+        return ResponseEntity.ok().body(productService.getServicesNP());
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/delete/{productId}")
     public ResponseEntity<ProductResponseDto> deleteProduct(@PathVariable Long productId){
@@ -41,18 +56,18 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.updateProduct(productId, requestDto));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponseDto> getProduct(@PathVariable Long productId){
         return ResponseEntity.ok().body(productService.getProduct(productId));
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/allproducts/{size}/{number}")
     public ResponseEntity<Page<TangibleProduct>> getAllProduct(@PathVariable (name = "size") int pageSize,@PathVariable (name = "number") int pageNumber){
         return ResponseEntity.ok().body(productService.getAllProduct(pageSize, pageNumber));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/allservices/{size}/{number}")
     public ResponseEntity<Page<IntangibleProduct>> getAllServices(@PathVariable (name = "size") int pageSize, @PathVariable (name = "number") int pageNumber){
         return ResponseEntity.ok().body(productService.getAllServices(pageSize, pageNumber));

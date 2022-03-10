@@ -116,6 +116,16 @@ public class PersonController {
         return favouriteService.addOrDeleteFavourite(productId, authentication);
     }
 
+    @PostMapping("/handle_favourite/{username}/{productId}")
+    public ResponseEntity<Boolean> handleFavourite(@PathVariable("username") String username, @PathVariable("productId") Long productId){
+        return ResponseEntity.ok().body(favouriteService.handleFavourite(username, productId));
+    }
+
+    @PostMapping("/check_fave_default/{username}/{productId}")
+    public ResponseEntity<Boolean> checkFaveDefault(@PathVariable("username") String username, @PathVariable("productId") Long productId){
+        return ResponseEntity.ok().body(favouriteService.checkFaveDefault(username, productId));
+    }
+
     @GetMapping("/view_favourites")
      public ResponseEntity<List<ProductResponseDto>> viewFavourites(Authentication authentication){
         return ResponseEntity.ok().body(favouriteService.viewFavourites(authentication));
