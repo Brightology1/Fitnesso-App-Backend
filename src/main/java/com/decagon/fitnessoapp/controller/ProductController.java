@@ -26,9 +26,7 @@ public class ProductController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<ProductResponseDto> addProduct(@RequestBody ProductRequestDto requestDto) throws IOException {
-        ProductResponseDto productResponseDto = productService.addProduct(requestDto);
-        System.out.println("This is res: " + productResponseDto);
-        return ResponseEntity.ok().body(productResponseDto);
+        return ResponseEntity.ok().body(productService.addProduct(requestDto));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -48,13 +46,13 @@ public class ProductController {
     public ResponseEntity<ProductResponseDto> getProduct(@PathVariable Long productId){
         return ResponseEntity.ok().body(productService.getProduct(productId));
     }
-   // @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/allproducts/{size}/{number}")
     public ResponseEntity<Page<TangibleProduct>> getAllProduct(@PathVariable (name = "size") int pageSize,@PathVariable (name = "number") int pageNumber){
         return ResponseEntity.ok().body(productService.getAllProduct(pageSize, pageNumber));
     }
 
-  //  @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/allservices/{size}/{number}")
     public ResponseEntity<Page<IntangibleProduct>> getAllServices(@PathVariable (name = "size") int pageSize, @PathVariable (name = "number") int pageNumber){
         return ResponseEntity.ok().body(productService.getAllServices(pageSize, pageNumber));
@@ -70,7 +68,8 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/viewproductdetails/{Id}/{producttype}")
-    public ResponseEntity<ProductResponseDto> viewProductDetailForAdmin(@PathVariable("Id") Long productId, @PathVariable("producttype") String productType){
+    public ResponseEntity<ProductResponseDto> viewProductDetailForAdmin(@PathVariable("Id") Long productId,
+                                                                  @PathVariable("producttype") String productType){
         return ResponseEntity.ok().body(productService.viewProductDetails(productId, productType));
     }
 

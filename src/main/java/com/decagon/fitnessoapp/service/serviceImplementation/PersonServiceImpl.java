@@ -6,9 +6,7 @@ import com.decagon.fitnessoapp.dto.*;
 import com.decagon.fitnessoapp.exception.AddressNotFoundException;
 import com.decagon.fitnessoapp.exception.CustomServiceExceptions;
 import com.decagon.fitnessoapp.exception.PersonNotFoundException;
-import com.decagon.fitnessoapp.model.user.Address;
-import com.decagon.fitnessoapp.model.user.Person;
-import com.decagon.fitnessoapp.model.user.ROLE_DETAIL;
+import com.decagon.fitnessoapp.model.user.*;
 import com.decagon.fitnessoapp.repository.AddressRepository;
 import com.decagon.fitnessoapp.repository.PersonRepository;
 import com.decagon.fitnessoapp.security.JwtUtils;
@@ -20,6 +18,7 @@ import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -171,15 +170,14 @@ public class PersonServiceImpl implements PersonService {
     public PersonInfoResponse getInfo(Authentication auth) {
         Person person = personRepository.findByUserName(auth.getName())
                 .orElseThrow(()-> new PersonNotFoundException("Person Not Found"));
-        System.out.println(person.toString());
         Address address = addressRepository.findFirstByPerson(person)
                 .orElseThrow(()-> new AddressNotFoundException("Address Not Found"));
         PersonInfoResponse personInfoResponse = new PersonInfoResponse();
-        System.out.println(address.toString());
         AddressRequest addressRequest = new AddressRequest();
         modelMapper.map(address, addressRequest);
         modelMapper.map(person, personInfoResponse);
         personInfoResponse.setAddress(addressRequest);
+        personInfoResponse.setDobText(personInfoResponse.setDate(personInfoResponse.getDateOfBirth()));
         return personInfoResponse;
     }
 
@@ -207,9 +205,9 @@ public class PersonServiceImpl implements PersonService {
             if (newPassword.equals(confirmPassword)) {
                 currentPerson.setPassword(bCryptPasswordEncoder.encode(newPassword));
                 personRepository.save(currentPerson);
-                return new ChangePasswordResponse("password successfully changed");
+                return new ChangePasswordResponse("Password successfully changed");
             }
-            else { return new ChangePasswordResponse("password mix match");}
+            else { return new ChangePasswordResponse("Confirm password does not match proposed password");}
         }
         else {
             return new ChangePasswordResponse("Incorrect current password");
@@ -221,8 +219,6 @@ public class PersonServiceImpl implements PersonService {
         Person person = personRepository.findByEmail(email)
                 .orElseThrow(()-> new PersonNotFoundException("Email not Registered"));
         String token = RandomString.make(64);
-        //TODO:remove after testing app
-        System.out.println(token);
         person.setResetPasswordToken(token);
         personRepository.save(person);
         resetPasswordMailSender(person.getEmail(), token);
@@ -325,5 +321,19 @@ public class PersonServiceImpl implements PersonService {
                 "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
                 "\n" +
                 "</div></div>";
+    }
+
+    @Override
+    public Page<Person> getAllUsers(int pageNumber) {
+        final List<Person> personList = personRepository.findAll();
+        int pageSize = 10;
+        int skipCount = (pageNumber - 1) * pageSize;
+        List<Person> usersPaginated = personList
+                .stream()
+                .skip(skipCount)
+                .limit(pageSize)
+                .collect(Collectors.toList());
+        Pageable usersPage = PageRequest.of(pageNumber, pageSize, Sort.by("firstName").ascending());
+        return new PageImpl<>(usersPaginated, usersPage, personList.size());
     }
 }
