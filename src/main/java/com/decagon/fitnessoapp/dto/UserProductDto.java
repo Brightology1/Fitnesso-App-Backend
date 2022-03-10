@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserProductDto implements Comparable<UserProductDto>{
+    private Long id;
     private String category;
     private String productName;
     private BigDecimal price;
