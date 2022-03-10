@@ -5,6 +5,7 @@ import com.decagon.fitnessoapp.model.user.Person;
 import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import org.springframework.data.domain.Page;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
@@ -19,22 +20,21 @@ public interface PersonService {
 
     UpdatePersonResponse updateUserDetails(UpdatePersonRequest updatePersonRequest);
 
-    PersonResponse register(PersonRequest personRequest) throws MailjetSocketTimeoutException, MailjetException, IOException;
+    PersonResponse register(PersonRequest personRequest) throws IOException;
 
     PersonResponse addTrainer(PersonRequest personRequest);
 
     ResponseEntity<String> removeTrainer(Long id);
 
-    PersonResponse sendingEmail(String email) throws MailjetSocketTimeoutException, MailjetException;
+    PersonResponse sendingEmail(String email) ;
 
     ChangePasswordResponse updateCurrentPassword(ChangePasswordRequest changePasswordRequest);
 
-    PersonResponse resetPasswordToken(String email) throws MailjetSocketTimeoutException, MailjetException;
+    PersonResponse resetPasswordToken(String email) ;
 
     PersonResponse updateResetPassword(ResetPasswordRequest passwordRequest, String token);
 
-    void resetPasswordMailSender(String email, String token) throws MailjetSocketTimeoutException,
-            MailjetException;
+    void resetPasswordMailSender(String email, String token) ;
 
     String buildEmail(String name, String link);
 

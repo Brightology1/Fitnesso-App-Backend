@@ -87,10 +87,16 @@ public class ProductController {
                                                                   @PathVariable("producttype") String productType){
         return ResponseEntity.ok().body(productService.viewProductDetails(productId, productType));
     }
-
+    @CrossOrigin("*")
     @GetMapping("/viewproducts/{pageNumber}")
     public ResponseEntity<?> viewAllProducts(@PathVariable(value="pageNumber") int pageNumber) {
         final Page<UserProductDto> allProducts = productService.getAllProducts(pageNumber);
+        return ResponseEntity.ok(allProducts);
+    }
+
+    @GetMapping("/viewproducts")
+    public ResponseEntity<?> searchAllProducts() {
+        final List<UserProductDto> allProducts = productService.searchAllProducts();
         return ResponseEntity.ok(allProducts);
     }
 

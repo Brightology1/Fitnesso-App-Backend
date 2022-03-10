@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/articles")
 @AllArgsConstructor
+@CrossOrigin
 public class BlogPostController {
 
     private final BlogPostService blogPostService;
@@ -59,5 +60,11 @@ public class BlogPostController {
     public ResponseEntity<?> getAllPosts(@PathVariable (name = "number") int pageNumber) {
         final Page<BlogPostResponse> blogPosts = blogPostService.getAllBlogPosts(pageNumber);
         return new ResponseEntity<>(blogPosts, HttpStatus.OK);
+    }
+
+    @GetMapping("/blogposts/single_article/{postId}")
+    public ResponseEntity<?> getPostById(@PathVariable Long postId){
+        BlogPostResponse blogPostResponse = blogPostService.getPostById(postId);
+        return new ResponseEntity<>(blogPostResponse, HttpStatus.OK);
     }
 }

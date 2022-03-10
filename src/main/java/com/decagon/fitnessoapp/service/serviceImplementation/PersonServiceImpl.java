@@ -11,8 +11,8 @@ import com.decagon.fitnessoapp.repository.AddressRepository;
 import com.decagon.fitnessoapp.repository.PersonRepository;
 import com.decagon.fitnessoapp.security.JwtUtils;
 import com.decagon.fitnessoapp.service.PersonService;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
+//import com.mailjet.client.errors.MailjetException;
+//import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
@@ -72,38 +72,45 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonResponse register(PersonRequest personRequest) throws MailjetSocketTimeoutException, MailjetException, IOException {
+    public PersonResponse register(PersonRequest personRequest) throws IOException {
         boolean isValidEmail = emailValidator.test(personRequest.getEmail());
         if(!isValidEmail){
-            throw new CustomServiceExceptions("Not a valid email");
+            return PersonResponse.builder().message("Not a valid email").build();
         }
 
         boolean isValidNumber = emailValidator.validatePhoneNumber(personRequest.getPhoneNumber());
 
         if(!isValidNumber){
-            throw new CustomServiceExceptions("Not a valid phone number");
+            return PersonResponse.builder().message("Not a valid phone Number").build();
         }
 
         boolean userExists = personRepository.findByEmail(personRequest.getEmail()).isPresent();
         if(userExists){
-            throw  new CustomServiceExceptions("email taken");
+            return PersonResponse.builder().message("email taken").build();
         }
+
+        boolean userNameExists = personRepository.findByUserName(personRequest.getUserName()).isPresent();
+        if(userNameExists){
+            return PersonResponse.builder().message("userName is taken").build();
+        }
+
 
         Person person = new Person();
         modelMapper.map(personRequest, person);
-
 
         final String encodedPassword = bCryptPasswordEncoder.encode(personRequest.getPassword());
         person.setPassword(encodedPassword);
         String token = RandomString.make(64);
         person.setResetPasswordToken(token);
-        CloudinaryConfig cloudinaryConfig = new CloudinaryConfig();
-        String url = cloudinaryConfig.createImage(person.getImage());
-        person.setImage(url);
+        if(personRequest.getImage() != null){
+            CloudinaryConfig cloudinaryConfig = new CloudinaryConfig();
+            String url = cloudinaryConfig.createImage(person.getImage());
+            person.setImage(url);
+        }
         personRepository.save(person);
         sendingEmail(personRequest.getEmail());
         return PersonResponse.builder().firstName(person.getFirstName()).lastName(person.getLastName())
-                .email(person.getEmail()).build();
+                .email(person.getEmail()).message("Successful") .build();
     }
 
     @Override
@@ -131,11 +138,11 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonResponse sendingEmail(String email) throws MailjetSocketTimeoutException, MailjetException {
+    public PersonResponse sendingEmail(String email){
         Person person = personRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomServiceExceptions("Email not registered"));
         String token = verificationTokenService.saveVerificationToken(person);
-        String link = "http://"+ website + ":" + port + "/person/confirm?token=" + token;
+        String link = "http://"+ website +"/person/confirm?token=" + token;
         String subject = "Confirm your email";
         emailSender.sendMessage(subject, person.getEmail(), buildEmail(person.getFirstName(), link));
         return PersonResponse.builder().message("Email sent").build();
@@ -215,7 +222,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonResponse resetPasswordToken(String email) throws MailjetSocketTimeoutException, MailjetException {
+    public PersonResponse resetPasswordToken(String email) {
         Person person = personRepository.findByEmail(email)
                 .orElseThrow(()-> new PersonNotFoundException("Email not Registered"));
         String token = RandomString.make(64);
@@ -239,8 +246,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void resetPasswordMailSender(String email, String token) throws MailjetSocketTimeoutException,
-            MailjetException {
+    public void resetPasswordMailSender(String email, String token) {
         String resetPasswordLink = "http://"+ website + ":" + port + "/update_password?token=" + token;
         String subject = "Here's the link to reset your password";
         String content = "<p>Hello,</p>"

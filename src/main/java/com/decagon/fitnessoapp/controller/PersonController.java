@@ -7,6 +7,7 @@ import com.decagon.fitnessoapp.service.PersonService;
 import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import org.springframework.data.domain.Page;
+
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import com.decagon.fitnessoapp.dto.*;
@@ -21,7 +22,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 @RequestMapping("/person")
 @AllArgsConstructor
