@@ -1,6 +1,5 @@
 package com.decagon.fitnessoapp.service.serviceImplementation;
 
-import com.decagon.fitnessoapp.config.cloudinary.CloudinaryConfig;
 import com.decagon.fitnessoapp.dto.ProductRequestDto;
 import com.decagon.fitnessoapp.dto.ProductResponseDto;
 import com.decagon.fitnessoapp.dto.UserProductDto;
@@ -8,17 +7,12 @@ import com.decagon.fitnessoapp.model.product.IntangibleProduct;
 import com.decagon.fitnessoapp.model.product.TangibleProduct;
 import com.decagon.fitnessoapp.repository.IntangibleProductRepository;
 import com.decagon.fitnessoapp.repository.TangibleProductRepository;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -66,11 +60,10 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
         ProductRequestDto productDto = new ProductRequestDto();
 
         if(requestDto.getImage() != null){
-            CloudinaryConfig cloudinaryConfig = new CloudinaryConfig();
-            String url = cloudinaryConfig.createImage(requestDto.getImage());
-            productDto.setImage(url);
+            productDto.setImage(requestDto.getImage());
+        }else{
+            productDto.setImage("null");
         }
-
         productDto.setCategory(requestDto.getCategory().toUpperCase());
         productDto.setProductName(requestDto.getProductName().toUpperCase());
         productDto.setPrice(requestDto.getPrice());

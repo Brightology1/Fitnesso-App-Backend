@@ -5,7 +5,6 @@ import com.decagon.fitnessoapp.dto.BlogPostResponse;
 import com.decagon.fitnessoapp.exception.CustomServiceExceptions;
 import com.decagon.fitnessoapp.model.blog.BlogPost;
 import com.decagon.fitnessoapp.model.user.Person;
-import com.decagon.fitnessoapp.repository.AuthorRepository;
 import com.decagon.fitnessoapp.repository.BlogPostRepository;
 import com.decagon.fitnessoapp.repository.PersonRepository;
 import com.decagon.fitnessoapp.service.BlogPostService;

@@ -1,17 +1,15 @@
 package com.decagon.fitnessoapp.controller;
 
+import com.decagon.fitnessoapp.dto.*;
 import com.decagon.fitnessoapp.model.user.ROLE_DETAIL;
 import com.decagon.fitnessoapp.service.FavouriteService;
 import com.decagon.fitnessoapp.service.PersonService;
-//import com.mailjet.client.errors.MailjetException;
-//import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import com.decagon.fitnessoapp.dto.*;
 import com.decagon.fitnessoapp.service.VerificationService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 

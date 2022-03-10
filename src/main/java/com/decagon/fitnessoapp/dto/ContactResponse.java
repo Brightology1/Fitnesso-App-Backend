@@ -1,7 +1,5 @@
 package com.decagon.fitnessoapp.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;

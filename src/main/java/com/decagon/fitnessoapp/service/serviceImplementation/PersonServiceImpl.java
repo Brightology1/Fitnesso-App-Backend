@@ -1,18 +1,17 @@
 package com.decagon.fitnessoapp.service.serviceImplementation;
 
 import com.decagon.fitnessoapp.Email.EmailService;
-import com.decagon.fitnessoapp.config.cloudinary.CloudinaryConfig;
 import com.decagon.fitnessoapp.dto.*;
 import com.decagon.fitnessoapp.exception.AddressNotFoundException;
 import com.decagon.fitnessoapp.exception.CustomServiceExceptions;
 import com.decagon.fitnessoapp.exception.PersonNotFoundException;
-import com.decagon.fitnessoapp.model.user.*;
+import com.decagon.fitnessoapp.model.user.Address;
+import com.decagon.fitnessoapp.model.user.Person;
+import com.decagon.fitnessoapp.model.user.ROLE_DETAIL;
 import com.decagon.fitnessoapp.repository.AddressRepository;
 import com.decagon.fitnessoapp.repository.PersonRepository;
 import com.decagon.fitnessoapp.security.JwtUtils;
 import com.decagon.fitnessoapp.service.PersonService;
-//import com.mailjet.client.errors.MailjetException;
-//import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
@@ -29,7 +28,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -88,11 +89,6 @@ public class PersonServiceImpl implements PersonService {
             return PersonResponse.builder().message("email taken").build();
         }
 
-        boolean userNameExists = personRepository.findByUserName(personRequest.getUserName()).isPresent();
-        if(userNameExists){
-            return PersonResponse.builder().message("userName is taken").build();
-        }
-
 
         Person person = new Person();
         modelMapper.map(personRequest, person);
@@ -101,13 +97,9 @@ public class PersonServiceImpl implements PersonService {
         person.setPassword(encodedPassword);
         String token = RandomString.make(64);
         person.setResetPasswordToken(token);
-        if(personRequest.getImage() != null){
-            CloudinaryConfig cloudinaryConfig = new CloudinaryConfig();
-            String url = cloudinaryConfig.createImage(person.getImage());
-            person.setImage(url);
-        }
+
         personRepository.save(person);
-        sendingEmail(personRequest.getEmail());
+//        sendingEmail(personRequest.getEmail());
         return PersonResponse.builder().firstName(person.getFirstName()).lastName(person.getLastName())
                 .email(person.getEmail()).message("Successful") .build();
     }

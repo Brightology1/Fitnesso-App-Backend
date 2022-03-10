@@ -1,6 +1,5 @@
 package com.decagon.fitnessoapp.dto.transactionDto;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
