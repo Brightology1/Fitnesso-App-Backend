@@ -17,7 +17,6 @@ import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -319,19 +318,5 @@ public class PersonServiceImpl implements PersonService {
                 "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
                 "\n" +
                 "</div></div>";
-    }
-
-    @Override
-    public Page<Person> getAllUsers(int pageNumber) {
-        final List<Person> personList = personRepository.findAll();
-        int pageSize = 10;
-        int skipCount = (pageNumber - 1) * pageSize;
-        List<Person> usersPaginated = personList
-                .stream()
-                .skip(skipCount)
-                .limit(pageSize)
-                .collect(Collectors.toList());
-        Pageable usersPage = PageRequest.of(pageNumber, pageSize, Sort.by("firstName").ascending());
-        return new PageImpl<>(usersPaginated, usersPage, personList.size());
     }
 }

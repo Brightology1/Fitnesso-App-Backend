@@ -29,21 +29,6 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.addProduct(requestDto));
     }
 
-    @GetMapping("/view_all_products_np")
-    public ResponseEntity<List<UserProductDto>> viewAllProductsNP() {
-        return ResponseEntity.ok().body(productService.getAllProductsNP());
-    }
-
-    @GetMapping("/view_products_np")
-    public ResponseEntity<List<UserProductDto>> viewProductsNP() {
-        return ResponseEntity.ok().body(productService.getProductsNP());
-    }
-
-    @GetMapping("/view_services_np")
-    public ResponseEntity<List<UserProductDto>> viewServicesNP() {
-        return ResponseEntity.ok().body(productService.getServicesNP());
-    }
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/delete/{productId}")
     public ResponseEntity<ProductResponseDto> deleteProduct(@PathVariable Long productId){

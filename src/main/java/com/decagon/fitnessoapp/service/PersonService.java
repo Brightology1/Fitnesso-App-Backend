@@ -1,16 +1,12 @@
 package com.decagon.fitnessoapp.service;
 
 import com.decagon.fitnessoapp.dto.*;
-import com.decagon.fitnessoapp.model.user.Person;
 //import com.mailjet.client.errors.MailjetException;
 //import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import org.springframework.data.domain.Page;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
 import java.io.IOException;
-import java.util.List;
 
 public interface PersonService {
 
@@ -38,5 +34,4 @@ public interface PersonService {
 
     String buildEmail(String name, String link);
 
-    Page<Person> getAllUsers(int pageNumber);
 }
