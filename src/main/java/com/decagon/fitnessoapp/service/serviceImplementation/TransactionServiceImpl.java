@@ -30,8 +30,10 @@ public class TransactionServiceImpl implements TransactionService {
     private final RestTemplate restTemplate;
     private final OrderRepository orderRepository;
 
-    @Value("${website.address}")
-    private String website;
+    @Value("${website.redirect}")
+    private String redirectWebsite;
+    @Value("${api.payStack}")
+    private String payStackKey;
     @Value("${server.port}")
     private Integer port;
 
@@ -47,10 +49,12 @@ public class TransactionServiceImpl implements TransactionService {
                                                         String referenceNumber, Long cardNumber){
 
         TransactionRequestDTO transactionRequestDTO = new TransactionRequestDTO();
-        final String successfulTransaction = "http://" + website + ":" + port + "/transaction/success";
-        final String failedTransaction = "http://" + website + ":" + port + "/transaction/fail";
+//        final String successfulTransaction = "http://"+ redirectWebsite + "/transaction/success";
+        final String successfulTransaction = "http://"+ redirectWebsite;
+//        final String failedTransaction = "http://" + redirectWebsite + "/transaction/fail";
+        final String failedTransaction = "http://" + redirectWebsite;
         final String url = "https://api.paystack.co/transaction/initialize";
-        final String key = "API.API_KEY_PAYMENT";
+        final String key = payStackKey;
         log.info(totalPrice.toString());
 
         transactionRequestDTO.setEmail(email);

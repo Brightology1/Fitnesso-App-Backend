@@ -1,5 +1,6 @@
 package com.decagon.fitnessoapp.service.serviceImplementation;
 
+import com.decagon.fitnessoapp.dto.CartInfo;
 import com.decagon.fitnessoapp.dto.CartResponse;
 import com.decagon.fitnessoapp.model.product.*;
 import com.decagon.fitnessoapp.model.user.Person;
@@ -57,19 +58,38 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         final String uniqueIdGenerator = RandomString.make(12);
         List<Cart> all = new ArrayList<>();
+        List<CartInfo> allInfo = new ArrayList<>();
         for(Map.Entry<Long, Integer> val : products.entrySet() ){
             Cart cart = new Cart();
+            CartInfo cartInfo = new CartInfo();
+            Optional<IntangibleProduct> intangibleProduct = intangibleProductRepository.findById(val.getKey());
+            Optional<TangibleProduct> tangibleProduct = tangibleProductRepository.findById(val.getKey());
+            if(tangibleProduct.isPresent()) {
+                cartInfo.setProduct(tangibleProduct.get());
+            }
+            else{
+                cartInfo.setProduct(intangibleProduct.get());
+            }
+
+            cartInfo.setQuantity(val.getValue());
+            cartInfo.setUniqueCartId(uniqueIdGenerator);
+            cartInfo.setPersonId(person.getId());
+
+
             cart.setProductId(val.getKey());
             cart.setQuantity(val.getValue());
             cart.setUniqueCartId(uniqueIdGenerator);
             cart.setPersonId(person.getId());
+
             updateTangibleProduct(val.getKey(), val.getValue());
             all.add(cart);
+            allInfo.add(cartInfo);
         }
 
+        shoppingCartRepository.saveAll(all);
 
         return CartResponse.builder()
-                .cartList(shoppingCartRepository.saveAll(all)).build();
+                .cartData(allInfo).build();
     }
 
 
