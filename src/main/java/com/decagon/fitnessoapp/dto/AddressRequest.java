@@ -8,9 +8,6 @@ import javax.validation.constraints.NotNull;
 public class AddressRequest {
 
     @NotNull
-    private Long id;
-
-    @NotNull
     private String userName;
 
     @NotNull

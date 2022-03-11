@@ -18,16 +18,6 @@ public class AddressController {
     @PostMapping("/addAddress")
     public ResponseEntity<AddressResponse> addAddress(@RequestBody AddressRequest addressRequest){
         System.out.println(addressRequest);
-        return ResponseEntity.ok().body(addressService.createAddress(addressRequest));
-    }
-
-    @PutMapping("/update_address/")
-    public ResponseEntity<AddressRequest> updateAddress(@RequestBody AddressRequest addressRequest) {
-        return ResponseEntity.ok().body(addressService.updateAddress(addressRequest));
-    }
-
-    @DeleteMapping("/delete_address/{addressId}")
-    public ResponseEntity<String> deleteAddress(@PathVariable("addressId") Long addressId) {
-        return ResponseEntity.ok().body(addressService.deleteAddress(addressId));
+        return ResponseEntity.ok(addressService.createAddress(addressRequest));
     }
 }
