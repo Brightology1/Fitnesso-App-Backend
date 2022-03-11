@@ -99,7 +99,7 @@ public class PersonServiceImpl implements PersonService {
         person.setResetPasswordToken(token);
 
         personRepository.save(person);
-//        sendingEmail(personRequest.getEmail());
+       sendingEmail(personRequest.getEmail());
         return PersonResponse.builder().firstName(person.getFirstName()).lastName(person.getLastName())
                 .email(person.getEmail()).message("Successful") .build();
     }
