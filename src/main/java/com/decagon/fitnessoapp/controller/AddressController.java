@@ -1,5 +1,6 @@
 package com.decagon.fitnessoapp.controller;
 
+import com.decagon.fitnessoapp.dto.AddressRegReq;
 import com.decagon.fitnessoapp.dto.AddressRequest;
 import com.decagon.fitnessoapp.dto.AddressResponse;
 import com.decagon.fitnessoapp.service.AddressService;
@@ -16,8 +17,7 @@ public class AddressController {
     public final AddressService addressService;
 
     @PostMapping("/addAddress")
-    public ResponseEntity<AddressResponse> addAddress(@RequestBody AddressRequest addressRequest){
-        System.out.println(addressRequest);
+    public ResponseEntity<AddressResponse> addAddress(@RequestBody AddressRegReq addressRequest){
         return ResponseEntity.ok().body(addressService.createAddress(addressRequest));
     }
 

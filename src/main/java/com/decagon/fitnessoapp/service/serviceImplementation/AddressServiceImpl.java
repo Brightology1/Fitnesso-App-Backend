@@ -1,5 +1,6 @@
 package com.decagon.fitnessoapp.service.serviceImplementation;
 
+import com.decagon.fitnessoapp.dto.AddressRegReq;
 import com.decagon.fitnessoapp.dto.AddressRequest;
 import com.decagon.fitnessoapp.exception.AddressNotFoundException;
 import com.decagon.fitnessoapp.dto.AddressResponse;
@@ -29,7 +30,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public AddressResponse createAddress(AddressRequest addressRequest) {
+    public AddressResponse createAddress(AddressRegReq addressRequest) {
         AddressResponse addressResponse = new AddressResponse();
         Optional<Person> person = personRepository.findByUserName(addressRequest.getUserName());
         if(person.isEmpty()){
@@ -39,7 +40,7 @@ public class AddressServiceImpl implements AddressService {
         Address address = new Address();
         modelMapper.map(addressRequest, address);
         address.setPerson(person.get());
-//        addressRepository.save(address);
+        addressRepository.save(address);
         addressResponse.setMessage("Address added successfully");
         return addressResponse;
     }

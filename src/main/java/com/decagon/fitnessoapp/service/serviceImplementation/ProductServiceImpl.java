@@ -1,6 +1,5 @@
 package com.decagon.fitnessoapp.service.serviceImplementation;
 
-import com.decagon.fitnessoapp.config.cloudinary.CloudinaryConfig;
 import com.decagon.fitnessoapp.dto.ProductRequestDto;
 import com.decagon.fitnessoapp.dto.ProductResponseDto;
 import com.decagon.fitnessoapp.dto.UserProductDto;
@@ -11,8 +10,6 @@ import com.decagon.fitnessoapp.repository.TangibleProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -62,15 +59,12 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
         ProductResponseDto responseDto;
         ProductRequestDto productDto = new ProductRequestDto();
 
-        CloudinaryConfig cloudinaryConfig = new CloudinaryConfig();
-        String url = cloudinaryConfig.createImage(requestDto.getImage());
-
         productDto.setCategory(requestDto.getCategory().toUpperCase());
         productDto.setProductName(requestDto.getProductName().toUpperCase());
         productDto.setPrice(requestDto.getPrice());
         productDto.setDescription(requestDto.getDescription());
         productDto.setProductType(requestDto.getProductType());
-        productDto.setImage(url);
+        productDto.setImage(requestDto.getImage());
         productDto.setMonthlySubscription(requestDto.getMonthlySubscription());
         productDto.setQuantity(0);
         productDto.setStock(Long.valueOf(requestDto.getQuantity()));
@@ -84,6 +78,7 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
                 tangibleProductRepository.save(tangibleProduct);
                 return modelMapper.map(tangibleProduct, ProductResponseDto.class);
             }
+
             TangibleProduct newProduct;
             newProduct = tangibleProductRepository.save(modelMapper.map(productDto, TangibleProduct.class));
             responseDto = modelMapper.map(newProduct, ProductResponseDto.class);
