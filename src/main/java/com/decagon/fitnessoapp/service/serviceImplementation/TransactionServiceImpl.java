@@ -54,7 +54,7 @@ public class TransactionServiceImpl implements TransactionService {
 //        final String failedTransaction = "http://" + redirectWebsite + "/transaction/fail";
         final String failedTransaction = "http://" + redirectWebsite;
         final String url = "https://api.paystack.co/transaction/initialize";
-        final String key = "sk_test_3688926642dbbfd382658ee9c53562ade92d0204";
+        final String key = payStackKey;
         log.info(totalPrice.toString());
 
         transactionRequestDTO.setEmail(email);
