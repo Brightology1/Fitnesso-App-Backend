@@ -1,5 +1,6 @@
 package com.decagon.fitnessoapp.service.serviceImplementation;
 
+import com.decagon.fitnessoapp.config.cloudinary.CloudinaryConfig;
 import com.decagon.fitnessoapp.dto.ProductRequestDto;
 import com.decagon.fitnessoapp.dto.ProductResponseDto;
 import com.decagon.fitnessoapp.dto.UserProductDto;
@@ -10,6 +11,8 @@ import com.decagon.fitnessoapp.repository.TangibleProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -59,19 +62,19 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
         ProductResponseDto responseDto;
         ProductRequestDto productDto = new ProductRequestDto();
 
-        if(requestDto.getImage() != null){
-            productDto.setImage(requestDto.getImage());
-        }else{
-            productDto.setImage("null");
-        }
+        CloudinaryConfig cloudinaryConfig = new CloudinaryConfig();
+        String url = cloudinaryConfig.createImage(requestDto.getImage());
+
         productDto.setCategory(requestDto.getCategory().toUpperCase());
         productDto.setProductName(requestDto.getProductName().toUpperCase());
         productDto.setPrice(requestDto.getPrice());
         productDto.setDescription(requestDto.getDescription());
         productDto.setProductType(requestDto.getProductType());
+        productDto.setImage(url);
         productDto.setMonthlySubscription(requestDto.getMonthlySubscription());
         productDto.setQuantity(requestDto.getQuantity());
         productDto.setStock(requestDto.getStock());
+
 
         if (productDto.getProductType().equals("PRODUCT")) {
             TangibleProduct tangibleProduct = tangibleProductRepository.findFirstByProductNameAndDescriptionAndCategoryAndPrice(requestDto.getProductName().toUpperCase(), requestDto.getDescription(), requestDto.getCategory().toUpperCase(), requestDto.getPrice()).orElse(null);
