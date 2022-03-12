@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CartResponse {
+    private List<CartInfo> cartData;
     private List<Cart> cartList;
     private Cart cart;
     private String message;

@@ -20,7 +20,7 @@ public class IntangibleProduct extends Product{
         return super.getProductName();
     }
 
-    @Column(name = "sessions_per_week", nullable = false)
+    @Column(name = "duration_in_hours_per_day", nullable = false)
     private Integer monthlySubscription;
 
 

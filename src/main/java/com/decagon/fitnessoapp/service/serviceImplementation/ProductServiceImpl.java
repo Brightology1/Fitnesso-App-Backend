@@ -78,13 +78,15 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
                 tangibleProductRepository.save(tangibleProduct);
                 return modelMapper.map(tangibleProduct, ProductResponseDto.class);
             }
-
+          
             TangibleProduct newProduct;
+
             newProduct = tangibleProductRepository.save(modelMapper.map(productDto, TangibleProduct.class));
             responseDto = modelMapper.map(newProduct, ProductResponseDto.class);
            return responseDto;
 
         } else if (productDto.getProductType().equals("SERVICE")) {
+
             IntangibleProduct newProduct;
 
             newProduct = intangibleProductRepository.save(modelMapper.map(productDto, IntangibleProduct.class));
@@ -226,40 +228,5 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
 
         }
         return searchResult;
-    }
-
-    @Override
-    public List<UserProductDto> getProductsNP() {
-        List<TangibleProduct> productList = tangibleProductRepository.findAll();
-        final List<UserProductDto> productDtos = productList.stream()
-                .map(x -> modelMapper.map(x, UserProductDto.class))
-                .collect(Collectors.toList());
-        Collections.sort(productDtos);
-        return productDtos;
-    }
-
-    @Override
-    public List<UserProductDto> getServicesNP() {
-        List<IntangibleProduct> productList = intangibleProductRepository.findAll();
-        final List<UserProductDto> productDtos = productList.stream()
-                .map(x -> modelMapper.map(x, UserProductDto.class))
-                .collect(Collectors.toList());
-        Collections.sort(productDtos);
-        return productDtos;
-    }
-
-    @Override
-    public List<UserProductDto> getAllProductsNP() {
-        List<UserProductDto> dtoList = getDtoList();
-        int pageSize = 10;
-        int pageNumber = 1;
-        int skipCount = (pageNumber - 1) * pageSize;
-        List<UserProductDto> activityPage = dtoList
-                .stream()
-                .skip(skipCount)
-                .limit(pageSize)
-                .collect(Collectors.toList());
-
-        return dtoList;
     }
 }

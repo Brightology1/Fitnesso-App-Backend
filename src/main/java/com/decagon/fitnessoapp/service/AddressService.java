@@ -11,5 +11,4 @@ public interface AddressService {
     AddressRequest updateAddress(AddressRequest request);
 
     String deleteAddress(Long id);
-
 }

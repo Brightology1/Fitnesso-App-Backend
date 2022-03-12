@@ -70,46 +70,6 @@ public class FavouriteServiceImpl implements FavouriteService {
     }
 
     @Override
-    public Boolean handleFavourite(String username, Long productId) {
-
-        Person person = personRepository.findPersonByUserName(username)
-                .orElseThrow(()-> new UsernameNotFoundException("User not found in favourite Service Implementation"));
-
-        Favourite favourite = new Favourite();
-
-        favourite.setProductId(productId);
-
-
-        boolean existsFavourite = favouriteRepository.existsFavouriteByPersonAndProductId(person, productId);
-
-        if(existsFavourite){
-            favouriteRepository.deleteFavouriteByPersonAndProductId(person, productId);
-            return false;
-        }
-        else{
-            favourite.setPerson(person);
-            favouriteRepository.save(favourite);
-        }
-
-
-        return true;
-    }
-
-    @Override
-    public Boolean checkFaveDefault(String username, Long productId) {
-        Person person = personRepository.findPersonByUserName(username)
-                .orElseThrow(()-> new UsernameNotFoundException("User not found in favourite Service Implementation"));
-
-        Favourite favourite = new Favourite();
-
-        favourite.setProductId(productId);
-
-
-        boolean existsFavourite = favouriteRepository.existsFavouriteByPersonAndProductId(person, productId);
-        return existsFavourite;
-    }
-
-    @Override
     public List<ProductResponseDto> viewFavourites(Authentication authentication) {
 
 //        ProductResponseDto productResponseDto = new ProductResponseDto();
