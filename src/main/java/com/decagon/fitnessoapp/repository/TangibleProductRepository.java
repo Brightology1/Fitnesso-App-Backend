@@ -17,5 +17,7 @@ public interface TangibleProductRepository extends JpaRepository<TangibleProduct
 
     @Query("SELECT t FROM TangibleProduct t WHERE CONCAT(t.category, t.productName, t.description) LIKE %?1%")
     List<TangibleProduct> findTangibleProductByCategoryOrProductNameOrByDescription(String freeText);
-    Optional<TangibleProduct> findByProductNameAndCategoryAndDescriptionAndPriceAndQuantity(String productName, String category, String description, BigDecimal price, Integer quantity);
+//    Optional<TangibleProduct> findByProductNameAndCategoryAndDescriptionAndPriceAndQuantity(String productName, String category, String description, BigDecimal price, Integer quantity);
+    Optional<TangibleProduct> findFirstByProductNameAndDescriptionAndCategoryAndPrice(String productName, String description, String category, BigDecimal price);
+    Optional<TangibleProduct> findByProductName(String productName);
 }

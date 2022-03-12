@@ -29,6 +29,11 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.addProduct(requestDto));
     }
 
+    @PostMapping("/add_test")
+    public ResponseEntity<ProductResponseDto> addAProduct(@RequestBody ProductRequestDto requestDto) throws IOException {
+        return ResponseEntity.ok().body(productService.addProduct(requestDto));
+    }
+
     @GetMapping("/view_all_products_np")
     public ResponseEntity<List<UserProductDto>> viewAllProductsNP() {
         return ResponseEntity.ok().body(productService.getAllProductsNP());

@@ -67,20 +67,17 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
         productDto.setCategory(requestDto.getCategory().toUpperCase());
         productDto.setProductName(requestDto.getProductName().toUpperCase());
         productDto.setPrice(requestDto.getPrice());
-        productDto.setDescription(requestDto.getDescription().toUpperCase());
+        productDto.setDescription(requestDto.getDescription());
         productDto.setProductType(requestDto.getProductType());
         productDto.setMonthlySubscription(requestDto.getMonthlySubscription());
         productDto.setQuantity(requestDto.getQuantity());
         productDto.setStock(requestDto.getStock());
 
-
         if (productDto.getProductType().equals("PRODUCT")) {
-            TangibleProduct tangibleProduct = tangibleProductRepository.findByProductNameAndCategoryAndDescriptionAndPriceAndQuantity(
-                    requestDto.getProductName(), requestDto.getCategory().toUpperCase(), requestDto.getDescription(), requestDto.getPrice(), requestDto.getQuantity()).orElse(null);
-            if(!tangibleProduct.equals(null)) {
-                Long availStock = tangibleProduct.getStock();
-                long newQuantity = availStock + requestDto.getQuantity();
-                tangibleProduct.setQuantity((int) newQuantity);
+            TangibleProduct tangibleProduct = tangibleProductRepository.findFirstByProductNameAndDescriptionAndCategoryAndPrice(requestDto.getProductName().toUpperCase(), requestDto.getDescription(), requestDto.getCategory().toUpperCase(), requestDto.getPrice()).orElse(null);
+
+            if(tangibleProduct != null) {
+                tangibleProduct.setStock(tangibleProduct.getStock() + requestDto.getQuantity());
                 tangibleProductRepository.save(tangibleProduct);
                 return modelMapper.map(tangibleProduct, ProductResponseDto.class);
             }
