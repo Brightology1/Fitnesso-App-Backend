@@ -37,6 +37,7 @@ public abstract class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
+    @Column(length = 500)
     private String description;
 
     private String image;
