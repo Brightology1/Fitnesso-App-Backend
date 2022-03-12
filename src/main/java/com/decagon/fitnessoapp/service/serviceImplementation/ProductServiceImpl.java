@@ -72,8 +72,8 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
         productDto.setProductType(requestDto.getProductType());
         productDto.setImage(url);
         productDto.setMonthlySubscription(requestDto.getMonthlySubscription());
-        productDto.setQuantity(requestDto.getQuantity());
-        productDto.setStock(requestDto.getStock());
+        productDto.setQuantity(0);
+        productDto.setStock(Long.valueOf(requestDto.getQuantity()));
 
 
         if (productDto.getProductType().equals("PRODUCT")) {
