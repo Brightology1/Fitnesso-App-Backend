@@ -31,4 +31,10 @@ public interface ProductService {
     List<UserProductDto> searchAllProducts();
 
     List<?> searchProduct(String text);
+
+    List<UserProductDto> getProductsNP();
+
+    List<UserProductDto> getServicesNP();
+
+    List<UserProductDto> getAllProductsNP();
 }

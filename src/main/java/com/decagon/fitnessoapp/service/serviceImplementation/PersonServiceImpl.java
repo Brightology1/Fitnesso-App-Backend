@@ -17,6 +17,7 @@ import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -156,17 +157,18 @@ public class PersonServiceImpl implements PersonService {
             for (String r : roles) {
                 if (r!=null) role = r;
             }
+            final PersonInfoResponse userInfo = getUserInfo(req.getUsername());
             res.setToken(jwt);
             res.setRole(role);
+            res.setUserInfo(userInfo);
             return ResponseEntity.ok().body(res);
         } catch (Exception e) {
-            throw new Exception("incorrect username or password!", e);
+            throw new Exception("Incorrect username or password!", e);
         }
     }
 
-    @Override
-    public PersonInfoResponse getInfo(Authentication auth) {
-        Person person = personRepository.findByUserName(auth.getName())
+    private PersonInfoResponse getUserInfo(String username) {
+        Person person = personRepository.findByUserName(username)
                 .orElseThrow(()-> new PersonNotFoundException("Person Not Found"));
         Address address = addressRepository.findFirstByPerson(person)
                 .orElseThrow(()-> new AddressNotFoundException("Address Not Found"));
@@ -318,5 +320,19 @@ public class PersonServiceImpl implements PersonService {
                 "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
                 "\n" +
                 "</div></div>";
+    }
+
+    @Override
+    public Page<Person> getAllUsers(int pageNumber) {
+        final List<Person> personList = personRepository.findAll();
+        int pageSize = 10;
+        int skipCount = (pageNumber - 1) * pageSize;
+        List<Person> usersPaginated = personList
+                .stream()
+                .skip(skipCount)
+                .limit(pageSize)
+                .collect(Collectors.toList());
+        Pageable usersPage = PageRequest.of(pageNumber, pageSize, Sort.by("firstName").ascending());
+        return new PageImpl<>(usersPaginated, usersPage, personList.size());
     }
 }

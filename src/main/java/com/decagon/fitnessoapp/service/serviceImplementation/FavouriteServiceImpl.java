@@ -40,8 +40,43 @@ public class FavouriteServiceImpl implements FavouriteService {
         this.modelMapper = modelMapper;
     }
 
+    @Override
+    public Boolean handleFavourite(String username, Long productId) {
+
+        Person person = personRepository.findPersonByUserName(username)
+                .orElseThrow(()-> new UsernameNotFoundException("User not found in favourite Service Implementation"));
+
+        Favourite favourite = new Favourite();
+
+        favourite.setProductId(productId);
+
+        boolean existsFavourite = favouriteRepository.existsFavouriteByPersonAndProductId(person, productId);
+
+        if(existsFavourite){
+            favouriteRepository.deleteFavouriteByPersonAndProductId(person, productId);
+            return false;
+        }
+        else{
+            favourite.setPerson(person);
+            favouriteRepository.save(favourite);
+        }
+
+        return true;
+    }
+
+    @Override
+    public Boolean checkFaveDefault(String username, Long productId) {
+        Person person = personRepository.findPersonByUserName(username)
+                .orElseThrow(()-> new UsernameNotFoundException("User not found in favourite Service Implementation"));
+
+        Favourite favourite = new Favourite();
+
+        favourite.setProductId(productId);
 
 
+        boolean existsFavourite = favouriteRepository.existsFavouriteByPersonAndProductId(person, productId);
+        return existsFavourite;
+    }
 
     @Override
     public ResponseEntity<String> addOrDeleteFavourite(Long productId, Authentication authentication) {
