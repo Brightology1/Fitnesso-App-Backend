@@ -167,6 +167,21 @@ public class PersonServiceImpl implements PersonService {
         }
     }
 
+    @Override
+    public PersonInfoResponse getInfo(Authentication auth) {
+        Person person = personRepository.findByUserName(auth.getName())
+                .orElseThrow(()-> new PersonNotFoundException("Person Not Found"));
+        Address address = addressRepository.findFirstByPerson(person)
+                .orElseThrow(()-> new AddressNotFoundException("Address Not Found"));
+        PersonInfoResponse personInfoResponse = new PersonInfoResponse();
+        AddressRequest addressRequest = new AddressRequest();
+        modelMapper.map(address, addressRequest);
+        modelMapper.map(person, personInfoResponse);
+        personInfoResponse.setAddress(addressRequest);
+        personInfoResponse.setDobText(personInfoResponse.setDate(personInfoResponse.getDateOfBirth()));
+        return personInfoResponse;
+    }
+
     private PersonInfoResponse getUserInfo(String username) {
         Person person = personRepository.findByUserName(username)
                 .orElseThrow(()-> new PersonNotFoundException("Person Not Found"));

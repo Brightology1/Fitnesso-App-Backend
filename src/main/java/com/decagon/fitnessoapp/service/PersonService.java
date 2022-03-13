@@ -14,6 +14,8 @@ public interface PersonService {
 
     ResponseEntity<AuthResponse> loginUser(AuthRequest req) throws Exception;
 
+    PersonInfoResponse getInfo(Authentication authentication) throws Exception;
+
     UpdatePersonResponse updateUserDetails(UpdatePersonRequest updatePersonRequest);
 
     PersonResponse register(PersonRequest personRequest) throws IOException;
