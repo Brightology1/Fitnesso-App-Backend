@@ -19,5 +19,5 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     Optional<Person> findByEmail(String email);
     Optional<Person> findByResetPasswordToken(String token);
 
-    Optional<List<Person>> findByRoleDetail(ROLE_DETAIL role);
+    Optional<List<Person>> findAllByRoleDetail(ROLE_DETAIL role);
 }
