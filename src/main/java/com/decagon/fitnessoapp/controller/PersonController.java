@@ -40,6 +40,12 @@ public class PersonController {
         return ResponseEntity.ok().body(personService.getInfo(authentication));
     }
 
+    @GetMapping("/admin/stats")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<AdminStats> getStats() {
+        return ResponseEntity.ok().body(personService.getFitnessoDetails());
+    }
+
     @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     @PutMapping("/profile/edit/password")
     public  ResponseEntity<ChangePasswordResponse> editUserPassword(@RequestBody ChangePasswordRequest changePassword) {

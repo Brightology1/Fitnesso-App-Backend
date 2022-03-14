@@ -67,4 +67,12 @@ public class AddressServiceImpl implements AddressService {
         addressRepository.delete(address);
         return "Address deleted successfully!";
     }
+
+    @Override
+    public Address getAddress(Long id) {
+        final Address found = addressRepository.findById(id).orElseThrow(
+                () -> new AddressNotFoundException("Address not found"));
+
+        return found;
+    }
 }

@@ -8,8 +8,7 @@ import com.decagon.fitnessoapp.exception.PersonNotFoundException;
 import com.decagon.fitnessoapp.model.user.Address;
 import com.decagon.fitnessoapp.model.user.Person;
 import com.decagon.fitnessoapp.model.user.ROLE_DETAIL;
-import com.decagon.fitnessoapp.repository.AddressRepository;
-import com.decagon.fitnessoapp.repository.PersonRepository;
+import com.decagon.fitnessoapp.repository.*;
 import com.decagon.fitnessoapp.security.JwtUtils;
 import com.decagon.fitnessoapp.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,6 +45,9 @@ public class PersonServiceImpl implements PersonService {
     private final JwtUtils jwtUtils;
     private final PersonDetailsService userDetailsService;
     private final AddressRepository addressRepository;
+    private final TangibleProductRepository tangibleProductRepository;
+    private final IntangibleProductRepository intangibleProductRepository;
+    private final OrderRepository orderRepository;
     @Value("${website.address}")
     private String website;
     @Value("${server.port}")
@@ -59,7 +59,7 @@ public class PersonServiceImpl implements PersonService {
                              PersonRepository personRepository, EmailValidator emailValidator, ModelMapper modelMapper,
                              EmailService emailSender, JwtUtils jwtUtils,
                              PersonDetailsService userDetailsService
-            , AuthenticationManager authenticationManager, AddressRepository addressRepository) {
+            , AuthenticationManager authenticationManager, AddressRepository addressRepository, TangibleProductRepository tangibleProductRepository, IntangibleProductRepository intangibleProductRepository, OrderRepository orderRepository) {
         this.verificationTokenService = verificationTokenService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.personRepository = personRepository;
@@ -70,6 +70,9 @@ public class PersonServiceImpl implements PersonService {
         this.jwtUtils = jwtUtils;
         this.userDetailsService = userDetailsService;
         this.addressRepository = addressRepository;
+        this.tangibleProductRepository = tangibleProductRepository;
+        this.intangibleProductRepository = intangibleProductRepository;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -169,17 +172,18 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public PersonInfoResponse getInfo(Authentication auth) {
-        Person person = personRepository.findByUserName(auth.getName())
-                .orElseThrow(()-> new PersonNotFoundException("Person Not Found"));
-        Address address = addressRepository.findFirstByPerson(person)
-                .orElseThrow(()-> new AddressNotFoundException("Address Not Found"));
-        PersonInfoResponse personInfoResponse = new PersonInfoResponse();
-        AddressRequest addressRequest = new AddressRequest();
-        modelMapper.map(address, addressRequest);
-        modelMapper.map(person, personInfoResponse);
-        personInfoResponse.setAddress(addressRequest);
-        personInfoResponse.setDobText(personInfoResponse.setDate(personInfoResponse.getDateOfBirth()));
-        return personInfoResponse;
+//        Person person = personRepository.findByUserName(auth.getName())
+//                .orElseThrow(()-> new PersonNotFoundException("Person Not Found"));
+//        Address address = addressRepository.findFirstByPerson(person)
+//                .orElseThrow(()-> new AddressNotFoundException("Address Not Found"));
+//        PersonInfoResponse personInfoResponse = new PersonInfoResponse();
+//        AddressRequest addressRequest = new AddressRequest();
+//        modelMapper.map(address, addressRequest);
+//        modelMapper.map(person, personInfoResponse);
+//        personInfoResponse.setAddress(addressRequest);
+//        personInfoResponse.setDobText(personInfoResponse.setDate(personInfoResponse.getDateOfBirth()));
+//        return personInfoResponse;
+        return getUserInfo(auth.getName());
     }
 
     private PersonInfoResponse getUserInfo(String username) {
@@ -207,6 +211,22 @@ public class PersonServiceImpl implements PersonService {
         UpdatePersonResponse response = new UpdatePersonResponse();
         modelMapper.map(existingPerson,response);
         return response;
+    }
+
+    @Override
+    public AdminStats getFitnessoDetails() {
+        final int usersCount = personRepository.findAll().size();
+        final int productsCount = tangibleProductRepository.findAll().size();
+        final int servicesCount = intangibleProductRepository.findAll().size();
+        final int ordersCount = orderRepository.findAll().size();
+
+        AdminStats stats = new AdminStats();
+        stats.setOrdersCount(ordersCount);
+        stats.setUsersCount(usersCount);
+        stats.setProductsCount(productsCount);
+        stats.setServicesCount(servicesCount);
+
+        return stats;
     }
 
     @Override

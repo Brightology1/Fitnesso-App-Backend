@@ -26,6 +26,8 @@ public interface PersonService {
 
     PersonResponse sendingEmail(String email) ;
 
+    AdminStats getFitnessoDetails();
+
     ChangePasswordResponse updateCurrentPassword(ChangePasswordRequest changePasswordRequest);
 
     PersonResponse resetPasswordToken(String email) ;
