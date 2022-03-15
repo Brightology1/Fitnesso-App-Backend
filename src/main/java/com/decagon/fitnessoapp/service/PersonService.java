@@ -3,6 +3,8 @@ package com.decagon.fitnessoapp.service;
 import com.decagon.fitnessoapp.dto.*;
 //import com.mailjet.client.errors.MailjetException;
 //import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.decagon.fitnessoapp.model.user.Person;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
@@ -24,6 +26,8 @@ public interface PersonService {
 
     PersonResponse sendingEmail(String email) ;
 
+    AdminStats getFitnessoDetails();
+
     ChangePasswordResponse updateCurrentPassword(ChangePasswordRequest changePasswordRequest);
 
     PersonResponse resetPasswordToken(String email) ;
@@ -33,5 +37,7 @@ public interface PersonService {
     void resetPasswordMailSender(String email, String token) ;
 
     String buildEmail(String name, String link);
+
+    Page<Person> getAllUsers(int pageNumber);
 
 }

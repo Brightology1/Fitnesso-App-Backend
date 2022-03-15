@@ -59,24 +59,27 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
         ProductResponseDto responseDto;
         ProductRequestDto productDto = new ProductRequestDto();
 
-        if(requestDto.getImage() != null){
-            productDto.setImage(requestDto.getImage());
-        }else{
-            productDto.setImage("null");
-        }
         productDto.setCategory(requestDto.getCategory().toUpperCase());
         productDto.setProductName(requestDto.getProductName().toUpperCase());
         productDto.setPrice(requestDto.getPrice());
-        productDto.setDescription(requestDto.getDescription().toUpperCase());
+        productDto.setDescription(requestDto.getDescription());
         productDto.setProductType(requestDto.getProductType());
+        productDto.setImage(requestDto.getImage());
         productDto.setMonthlySubscription(requestDto.getMonthlySubscription());
-        productDto.setQuantity(requestDto.getQuantity());
-        productDto.setStock(requestDto.getStock());
+        productDto.setQuantity(0);
+        productDto.setStock(Long.valueOf(requestDto.getQuantity()));
 
 
         if (productDto.getProductType().equals("PRODUCT")) {
-            TangibleProduct newProduct;
+            TangibleProduct tangibleProduct = tangibleProductRepository.findFirstByProductNameAndDescriptionAndCategoryAndPrice(requestDto.getProductName().toUpperCase(), requestDto.getDescription(), requestDto.getCategory().toUpperCase(), requestDto.getPrice()).orElse(null);
 
+            if(tangibleProduct != null) {
+                tangibleProduct.setStock(tangibleProduct.getStock() + requestDto.getQuantity());
+                tangibleProductRepository.save(tangibleProduct);
+                return modelMapper.map(tangibleProduct, ProductResponseDto.class);
+            }
+          
+            TangibleProduct newProduct;
 
             newProduct = tangibleProductRepository.save(modelMapper.map(productDto, TangibleProduct.class));
             responseDto = modelMapper.map(newProduct, ProductResponseDto.class);
@@ -188,9 +191,6 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
                 .map(x -> modelMapper.map(x, UserProductDto.class))
                 .collect(Collectors.toList());
 
-//        Collections.sort(intangibleDtos);
-//        Collections.sort(tangibleDtos);
-
         List<UserProductDto> productDtos = new ArrayList<>(intangibleDtos);
         productDtos.addAll(tangibleDtos);
 
@@ -225,5 +225,40 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
 
         }
         return searchResult;
+    }
+
+    @Override
+    public List<UserProductDto> getProductsNP() {
+        List<TangibleProduct> productList = tangibleProductRepository.findAll();
+        final List<UserProductDto> productDtos = productList.stream()
+                .map(x -> modelMapper.map(x, UserProductDto.class))
+                .collect(Collectors.toList());
+        Collections.sort(productDtos);
+        return productDtos;
+    }
+
+    @Override
+    public List<UserProductDto> getServicesNP() {
+        List<IntangibleProduct> productList = intangibleProductRepository.findAll();
+        final List<UserProductDto> productDtos = productList.stream()
+                .map(x -> modelMapper.map(x, UserProductDto.class))
+                .collect(Collectors.toList());
+        Collections.sort(productDtos);
+        return productDtos;
+    }
+
+    @Override
+    public List<UserProductDto> getAllProductsNP() {
+        List<UserProductDto> dtoList = getDtoList();
+        int pageSize = 10;
+        int pageNumber = 1;
+        int skipCount = (pageNumber - 1) * pageSize;
+        List<UserProductDto> activityPage = dtoList
+                .stream()
+                .skip(skipCount)
+                .limit(pageSize)
+                .collect(Collectors.toList());
+
+        return dtoList;
     }
 }

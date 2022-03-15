@@ -5,10 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class AddressRequest {
-
-    private Long id;
-
+public class AddressRegReq {
     @NotNull
     private String userName;
 

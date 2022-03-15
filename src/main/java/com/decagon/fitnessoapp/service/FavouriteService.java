@@ -9,5 +9,9 @@ import java.util.List;
 public interface FavouriteService {
     ResponseEntity<String> addOrDeleteFavourite(Long productId, Authentication authentication);
 
+    Boolean handleFavourite(String username, Long productId);
+
+    Boolean checkFaveDefault(String username, Long productId);
+
     List<ProductResponseDto> viewFavourites(Authentication authentication);
 }
