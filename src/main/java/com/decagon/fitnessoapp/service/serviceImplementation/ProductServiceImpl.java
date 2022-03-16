@@ -78,7 +78,7 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
                 tangibleProductRepository.save(tangibleProduct);
                 return modelMapper.map(tangibleProduct, ProductResponseDto.class);
             }
-          
+
             TangibleProduct newProduct;
 
             newProduct = tangibleProductRepository.save(modelMapper.map(productDto, TangibleProduct.class));
@@ -86,11 +86,13 @@ public class ProductServiceImpl implements com.decagon.fitnessoapp.service.Produ
            return responseDto;
 
         } else if (productDto.getProductType().equals("SERVICE")) {
-
             IntangibleProduct newProduct;
 
             newProduct = intangibleProductRepository.save(modelMapper.map(productDto, IntangibleProduct.class));
-            responseDto = modelMapper.map(newProduct, ProductResponseDto.class);
+//            newProduct.setMonthlySubscription(requestDto.getQuantity());
+            newProduct.setMonthlySubscription(requestDto.getMonthlySubscription());
+            final IntangibleProduct savedService = intangibleProductRepository.save(newProduct);
+            responseDto = modelMapper.map(savedService, ProductResponseDto.class);
             return responseDto;
         }
         throw new IllegalStateException("Check if all fields were filled properly");

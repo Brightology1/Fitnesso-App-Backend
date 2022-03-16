@@ -2,6 +2,7 @@ package com.decagon.fitnessoapp.controller;
 
 import com.decagon.fitnessoapp.model.user.Person;
 import com.decagon.fitnessoapp.model.user.ROLE_DETAIL;
+import com.decagon.fitnessoapp.model.user.TrainerProfile;
 import com.decagon.fitnessoapp.service.FavouriteService;
 import com.decagon.fitnessoapp.service.PersonService;
 import org.springframework.data.domain.Page;
@@ -71,6 +72,16 @@ public class PersonController {
     return ResponseEntity.ok(personService.addTrainer(personRequest));
     }
 
+    @PostMapping("/admin/add_trainer")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<TrainerResponse> registerTrainer(@RequestBody TrainerRequest request) {
+        return ResponseEntity.ok().body(personService.addTrainerModel(request));
+    }
+
+    @GetMapping("/view_trainers")
+    public ResponseEntity<List<TrainerProfile>> getTrainers() {
+        return ResponseEntity.ok().body(personService.getTrainers());
+    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/trainer/delete/{id}")
