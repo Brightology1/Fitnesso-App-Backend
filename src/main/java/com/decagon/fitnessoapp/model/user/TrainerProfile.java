@@ -17,8 +17,10 @@ public class TrainerProfile {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "id", nullable = false)
-    private Person Trainer;
+    private Person trainer;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10485760)
     private String description;
+
+    private Boolean isActive = true;
 }

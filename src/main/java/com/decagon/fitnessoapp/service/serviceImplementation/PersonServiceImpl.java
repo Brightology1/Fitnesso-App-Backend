@@ -8,6 +8,7 @@ import com.decagon.fitnessoapp.exception.PersonNotFoundException;
 import com.decagon.fitnessoapp.model.user.Address;
 import com.decagon.fitnessoapp.model.user.Person;
 import com.decagon.fitnessoapp.model.user.ROLE_DETAIL;
+import com.decagon.fitnessoapp.model.user.TrainerProfile;
 import com.decagon.fitnessoapp.repository.*;
 import com.decagon.fitnessoapp.security.JwtUtils;
 import com.decagon.fitnessoapp.service.PersonService;
@@ -48,6 +49,7 @@ public class PersonServiceImpl implements PersonService {
     private final TangibleProductRepository tangibleProductRepository;
     private final IntangibleProductRepository intangibleProductRepository;
     private final OrderRepository orderRepository;
+    private final TrainerProfileRepository trainerRepository;
     @Value("${website.address}")
     private String website;
     @Value("${server.port}")
@@ -59,7 +61,7 @@ public class PersonServiceImpl implements PersonService {
                              PersonRepository personRepository, EmailValidator emailValidator, ModelMapper modelMapper,
                              EmailService emailSender, JwtUtils jwtUtils,
                              PersonDetailsService userDetailsService
-            , AuthenticationManager authenticationManager, AddressRepository addressRepository, TangibleProductRepository tangibleProductRepository, IntangibleProductRepository intangibleProductRepository, OrderRepository orderRepository) {
+            , AuthenticationManager authenticationManager, AddressRepository addressRepository, TangibleProductRepository tangibleProductRepository, IntangibleProductRepository intangibleProductRepository, OrderRepository orderRepository, TrainerProfileRepository trainerRepository) {
         this.verificationTokenService = verificationTokenService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.personRepository = personRepository;
@@ -73,6 +75,7 @@ public class PersonServiceImpl implements PersonService {
         this.tangibleProductRepository = tangibleProductRepository;
         this.intangibleProductRepository = intangibleProductRepository;
         this.orderRepository = orderRepository;
+        this.trainerRepository = trainerRepository;
     }
 
     @Override
@@ -120,6 +123,36 @@ public class PersonServiceImpl implements PersonService {
 
         return modelMapper.map(person, PersonResponse.class);
 
+    }
+
+    @Override
+    public TrainerResponse addTrainerModel(TrainerRequest request) {
+        TrainerResponse response = new TrainerResponse();
+
+        final Person person = personRepository.findPersonByUserName(request.getUsername()).orElseThrow(
+                () -> new PersonNotFoundException("Could not find person: " + request.getUsername()));
+
+        if(person.getRoleDetail().equals(ROLE_DETAIL.PREMIUM)) {
+            person.setRoleDetail(ROLE_DETAIL.TRAINER);
+            personRepository.save(person);
+        } else if(person.getRoleDetail().equals(ROLE_DETAIL.TRAINER)) {
+            response.setTrainerInfo(modelMapper.map(person, PersonInfoResponse.class));
+            return response;
+        }
+        TrainerProfile trainer = new TrainerProfile();
+        trainer.setTrainer(person);
+        trainer.setDescription(request.getDescription());
+        trainerRepository.save(trainer);
+
+        response.setTrainerInfo(modelMapper.map(person, PersonInfoResponse.class));
+        response.setDescription(request.getDescription());
+        return response;
+    }
+
+    @Override
+    public List<TrainerProfile> getTrainers() {
+        final List<TrainerProfile> activeTrainers = trainerRepository.findAllByIsActive(true);
+        return activeTrainers;
     }
 
     @Override
