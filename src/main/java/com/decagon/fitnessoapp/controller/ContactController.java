@@ -14,12 +14,16 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("/contact")
 @CrossOrigin(origins = "*")
 public class ContactController {
 
     private final ContactService contactService;
+
+    @Autowired
+    public ContactController(ContactService contactService) {
+        this.contactService = contactService;
+    }
 
     @PostMapping("/save")
     public ResponseEntity<ContactRequest> saveContact(@Valid @RequestBody ContactRequest contactRequest){
